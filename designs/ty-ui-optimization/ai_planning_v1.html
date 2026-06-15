@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:        #F2EDE4;
+  --bg2:       #EAE2D6;
+  --card:      #FFFFFF;
+  --ink:       #1E1810;
+  --ink2:      #3D3528;
+  --ink3:      #7A6E60;
+  --ink4:      #A89E90;
+  --red:       #B84C2E;
+  --red2:      #D4613C;
+  --gold:      #9B7A3A;
+  --gold2:     #C4A04E;
+  --gold-bg:   rgba(155,122,58,0.10);
+  --gold-bd:   rgba(155,122,58,0.28);
+  --red-bg:    rgba(184,76,46,0.08);
+  --red-bd:    rgba(184,76,46,0.20);
+  --border:    rgba(30,24,16,0.10);
+  --border2:   rgba(30,24,16,0.06);
+  --shadow:    0 2px 12px rgba(30,24,16,0.08);
+  --shadow2:   0 4px 20px rgba(30,24,16,0.12);
+  --serif:     'Noto Serif SC', serif;
+  --sans:      'Noto Sans SC', sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#E8E0D4;font-family:var(--sans);padding:20px;display:flex;gap:30px;flex-wrap:wrap;align-items:flex-start;justify-content:center}
+
+/* ── Device shell ── */
+.device {
+  width: 260px; background: #1a1510; border-radius: 48px; padding: 10px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.35), 0 0 0 1px rgba(255,255,255,0.08);
+  position: relative; flex-shrink: 0;
+}
+.device::before {
+  content:''; position:absolute; top:10px; left:50%; transform:translateX(-50%);
+  width:80px; height:24px; background:#1a1510; border-radius:0 0 18px 18px;
+  z-index:20; border:1px solid rgba(255,255,255,0.06); border-top:none;
+}
+.screen {
+  background:var(--bg); border-radius:38px; overflow:hidden; height:600px;
+  display:flex; flex-direction:column; position:relative;
+}
+.screen-scroll {
+  flex:1; overflow-y:auto; overflow-x:hidden; scrollbar-width:none;
+}
+.screen-scroll::-webkit-scrollbar{display:none}
+
+.label {
+  text-align:center; font-size:10px; color:var(--ink4); margin-top:8px;
+  font-weight:500; max-width:260px;
+}
+
+/* ── Status bar ── */
+.status-bar {
+  height:32px; padding:8px 20px 0; display:flex; justify-content:space-between;
+  align-items:center; flex-shrink:0;
+}
+.status-time{font-size:11px;font-weight:600;color:var(--ink)}
+.status-icons{display:flex;gap:4px;align-items:center;color:var(--ink);font-size:11px}
+
+/* ── City Header ── */
+.city-header{padding:12px 18px 0;flex-shrink:0;position:relative}
+.city-prov-pill{
+  display:inline-flex;align-items:center;gap:4px;background:var(--gold-bg);
+  border:1px solid var(--gold-bd);border-radius:100px;padding:3px 10px;margin-bottom:6px;
+}
+.city-prov-pill span{font-size:10px;font-weight:500;color:var(--gold)}
+.city-name{
+  font-family:var(--serif);font-size:34px;font-weight:700;color:var(--ink);
+  letter-spacing:3px;line-height:1.1;
+}
+.city-slogan{font-size:11px;color:var(--ink3);margin-top:4px;letter-spacing:0.5px}
+.city-emoji{
+  position:absolute;right:16px;top:16px;font-size:52px;
+  filter:drop-shadow(0 4px 8px rgba(0,0,0,0.15));
+}
+
+/* ── Tabs ── */
+.tabs{
+  display:flex;padding:0 18px;margin-top:14px;
+  border-bottom:1.5px solid var(--border);flex-shrink:0;
+}
+.tab-item{
+  flex:1;text-align:center;padding:8px 0 9px;font-size:13px;
+  color:var(--ink4);font-weight:400;position:relative;cursor:pointer;
+}
+.tab-item.on{color:var(--red);font-weight:600}
+.tab-item.on::after{
+  content:'';position:absolute;bottom:-1.5px;left:15%;right:15%;height:2px;
+  background:var(--red);border-radius:2px;
+}
+
+/* ── AI 入口卡片 ── */
+.ai-entry-card {
+  margin: 12px 18px 0;
+  background: linear-gradient(135deg, #FFF7F0 0%, #FFF0F0 50%, #FFF8EE 100%);
+  border-radius: 14px;
+  padding: 14px;
+  border: 1px solid var(--red-bd);
+  box-shadow: var(--shadow);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+.ai-entry-card::before {
+  content: '';
+  position: absolute;
+  right: -20px; top: -20px;
+  width: 80px; height: 80px;
+  border-radius: 50%;
+  background: var(--red-bg);
+}
+.ai-entry-card::after {
+  content: '✨';
+  position: absolute;
+  right: 10px; top: 10px;
+  font-size: 24px;
+}
+.ai-entry-title {
+  font-family: var(--serif);
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 4px;
+}
+.ai-entry-sub {
+  font-size: 10px;
+  color: var(--ink3);
+  line-height: 1.5;
+  margin-bottom: 8px;
+  max-width: 170px;
+}
+.ai-entry-tags {
+  display: flex; gap: 6px; flex-wrap: wrap;
+}
+.ai-entry-tags span {
+  font-size: 8px;
+  padding: 3px 8px;
+  border-radius: 100px;
+  background: rgba(184,76,46,0.08);
+  color: var(--red);
+  font-weight: 500;
+}
+
+/* ── Route chips ── */
+.route-chips{
+  display:flex;gap:8px;padding:12px 18px 14px;overflow-x:auto;scrollbar-width:none;
+}
+.route-chips::-webkit-scrollbar{display:none}
+.chip{
+  flex-shrink:0;padding:6px 14px;border-radius:100px;font-size:11px;font-weight:500;
+  border:1px solid var(--border);background:var(--card);color:var(--ink2);white-space:nowrap;
+}
+.chip.on{background:var(--red);color:#fff;border-color:var(--red)}
+
+/* ─────────── PAGE A: 路线 Tab（含 AI 入口） ─────────── */
+.route-header{
+  padding:0 18px 10px;display:flex;align-items:flex-start;justify-content:space-between;
+}
+.route-title{font-family:var(--serif);font-size:16px;font-weight:600;color:var(--ink)}
+.route-sub{font-size:10px;color:var(--ink3);margin-top:3px}
+.badge-rec{
+  padding:4px 10px;border-radius:100px;background:var(--gold-bg);
+  border:1px solid var(--gold-bd);font-size:10px;font-weight:500;color:var(--gold);flex-shrink:0;
+}
+
+.route-step{display:flex;gap:12px;padding:0 18px 0 20px;margin-bottom:4px}
+.step-spine{
+  display:flex;flex-direction:column;align-items:center;flex-shrink:0;padding-top:2px;
+}
+.step-dot{
+  width:24px;height:24px;border-radius:50%;background:var(--red);color:#fff;
+  font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;
+  box-shadow:0 2px 8px rgba(184,76,46,0.35);flex-shrink:0;
+}
+.step-line{
+  width:2px;flex:1;min-height:20px;
+  background:repeating-linear-gradient(to bottom,var(--red2) 0px,var(--red2) 4px,transparent 4px,transparent 8px);
+  margin:4px 0;border-radius:2px;
+}
+.step-body{
+  background:var(--card);border-radius:14px;padding:10px 12px;flex:1;
+  margin-bottom:8px;border:1px solid var(--border2);box-shadow:var(--shadow);
+}
+.step-name{font-size:13px;font-weight:600;color:var(--ink)}
+.step-desc{font-size:10px;color:var(--ink3);margin-top:3px;line-height:1.5}
+.step-time{
+  display:inline-flex;align-items:center;gap:4px;margin-top:6px;
+  font-size:10px;font-weight:600;color:var(--red);
+}
+
+.copy-btn{
+  margin:4px 18px 10px;background:var(--red);color:#fff;border-radius:14px;
+  padding:13px;text-align:center;font-size:13px;font-weight:600;letter-spacing:0.5px;
+  box-shadow:0 4px 16px rgba(184,76,46,0.30);
+}
+
+.route-stats{
+  display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;padding:0 18px 16px;
+}
+.stat-box{
+  background:var(--card);border-radius:14px;padding:10px 8px;text-align:center;
+  border:1px solid var(--border2);box-shadow:var(--shadow);
+}
+.stat-num{font-size:18px;font-weight:700;color:var(--red);font-family:var(--serif)}
+.stat-lbl{font-size:9px;color:var(--ink4);margin-top:3px}
+
+/* ─────────── PAGE B: AI 对话 Sheet ─────────── */
+.sheet-overlay {
+  position: absolute; inset: 0; background: rgba(0,0,0,0.25); z-index:100;
+  display: flex; flex-direction: column; justify-content: flex-end;
+}
+.ai-sheet {
+  background: var(--card); border-radius: 20px 20px 0 0;
+  padding: 0 0 0 0; max-height: 420px; display: flex; flex-direction: column;
+}
+.sheet-handle {
+  width: 32px; height: 4px; background: var(--border); border-radius: 4px;
+  margin: 12px auto 0;
+}
+.sheet-title-row {
+  padding: 14px 18px 10px; display: flex; align-items: center; justify-content: space-between;
+}
+.sheet-title { font-family: var(--serif); font-size: 15px; font-weight: 600; color: var(--ink) }
+.sheet-close { font-size: 18px; color: var(--ink4); cursor: pointer }
+
+/* 快捷建议 */
+.quick-suggest {
+  padding: 0 18px 10px; display: flex; gap: 6px; flex-wrap: wrap;
+}
+.quick-chip {
+  font-size: 10px; padding: 5px 10px; border-radius: 100px;
+  border: 1px solid var(--border); background: var(--card); color: var(--ink3);
+  cursor: pointer; white-space: nowrap;
+}
+.quick-chip:hover { border-color: var(--red-bd); background: var(--red-bg); color: var(--red) }
+
+/* 输入区 */
+.input-row {
+  display: flex; gap: 8px; padding: 10px 18px 14px; align-items: center;
+  border-top: 1px solid var(--border2);
+}
+.input-box {
+  flex: 1; background: var(--bg); border-radius: 100px; padding: 10px 16px;
+  border: 1px solid var(--border); font-size: 12px; color: var(--ink);
+  font-family: var(--sans); outline: none;
+}
+.input-box::placeholder { color: var(--ink4) }
+.send-btn {
+  width: 36px; height: 36px; border-radius: 50%; background: var(--red);
+  border: none; color: #fff; font-size: 14px; cursor: pointer; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+}
+
+/* ─────────── PAGE C: AI 生成结果 ─────────── */
+.ai-result-header {
+  padding: 14px 18px 8px;
+  display: flex; align-items: center; gap: 8px;
+}
+.ai-badge {
+  padding: 3px 8px; border-radius: 6px; background: var(--red-bg);
+  font-size: 9px; font-weight: 600; color: var(--red);
+}
+.ai-query { font-size: 11px; color: var(--ink3); flex: 1 }
+.ai-edit { font-size: 10px; color: var(--ink4); cursor: pointer }
+
+.ai-route-card {
+  margin: 8px 18px; background: var(--card); border-radius: 14px;
+  border: 1px solid var(--border2); box-shadow: var(--shadow); overflow: hidden;
+}
+.ai-route-card-header {
+  padding: 12px 14px 8px; display: flex; align-items: flex-start; justify-content: space-between;
+}
+.ai-route-card-title { font-family: var(--serif); font-size: 15px; font-weight: 600; color: var(--ink) }
+.ai-route-card-sub { font-size: 9px; color: var(--ink3); margin-top: 2px }
+.ai-route-card-badge {
+  padding: 2px 8px; border-radius: 100px; background: var(--red); color: #fff;
+  font-size: 9px; font-weight: 600;
+}
+
+/* AI 路线步骤（区别于预设路线的红色，用金铜色） */
+.ai-step .step-dot { background: var(--gold) }
+.ai-step .step-line {
+  background: repeating-linear-gradient(to bottom,var(--gold2) 0px,var(--gold2) 4px,transparent 4px,transparent 8px);
+}
+.ai-step .step-time { color: var(--gold) }
+
+.ai-actions {
+  display: flex; gap: 8px; padding: 8px 18px 14px;
+}
+.ai-btn-primary {
+  flex: 1; background: var(--red); color: #fff; border-radius: 14px;
+  padding: 12px; text-align: center; font-size: 12px; font-weight: 600;
+  border: none; cursor: pointer;
+}
+.ai-btn-secondary {
+  flex: 1; background: var(--card); color: var(--ink2); border-radius: 14px;
+  padding: 12px; text-align: center; font-size: 12px; font-weight: 500;
+  border: 1px solid var(--border); cursor: pointer;
+}
+
+/* ─────────── PAGE D: 介绍页 AI 入口横幅 ─────────── */
+.ai-banner {
+  margin: 0 18px 14px; background: linear-gradient(135deg, #FFF5F2, #FFF8F0);
+  border-radius: 14px; padding: 12px 14px; border: 1px solid var(--red-bd);
+  box-shadow: var(--shadow); display: flex; align-items: center; gap: 10px;
+}
+.ai-banner-emoji { font-size: 28px; flex-shrink: 0 }
+.ai-banner-text { flex: 1 }
+.ai-banner-title { font-size: 11px; font-weight: 600; color: var(--ink) }
+.ai-banner-sub { font-size: 8px; color: var(--ink4); margin-top: 2px }
+.ai-banner-arrow { font-size: 16px; color: var(--red); flex-shrink: 0 }
+
+/* ── 对话消息 ── */
+.chat-area {
+  flex: 1; overflow-y: auto; padding: 10px 18px; display: flex; flex-direction: column; gap: 10px;
+  min-height: 100px; max-height: 200px;
+}
+.chat-msg {
+  max-width: 85%; padding: 10px 12px; border-radius: 14px; font-size: 11px; line-height: 1.5;
+}
+.chat-msg.user {
+  align-self: flex-end; background: var(--red); color: #fff;
+  border-bottom-right-radius: 4px;
+}
+.chat-msg.ai {
+  align-self: flex-start; background: var(--bg); color: var(--ink2);
+  border-bottom-left-radius: 4px;
+}
+.chat-msg.ai .typing { display: flex; gap: 4px; padding: 4px 0 }
+.chat-msg.ai .typing span {
+  width: 6px; height: 6px; border-radius: 50%; background: var(--ink4);
+  animation: bounce 1s ease-in-out infinite;
+}
+.chat-msg.ai .typing span:nth-child(2){animation-delay:0.15s}
+.chat-msg.ai .typing span:nth-child(3){animation-delay:0.3s}
+@keyframes bounce{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-6px)}}
+</style>
+</head>
+<body>
+
+<!-- ═══════ PAGE A: 路线 Tab（含 AI 入口卡片） ═══════ -->
+<div>
+<div class="device">
+  <div class="screen">
+    <div class="status-bar">
+      <span class="status-time">21:54</span>
+      <div class="status-icons">📶 🔋</div>
+    </div>
+    <div class="city-header">
+      <div class="city-emoji">🗺️</div>
+      <div class="city-prov-pill"><span>山西省省会</span></div>
+      <div class="city-name">太原</div>
+      <div class="city-slogan">锦绣太原城 · 龙城文脉 · 汾河烟火</div>
+    </div>
+    <div class="tabs">
+      <div class="tab-item">介绍</div>
+      <div class="tab-item">景点</div>
+      <div class="tab-item">美食</div>
+      <div class="tab-item on">路线</div>
+    </div>
+
+    <div class="screen-scroll">
+
+      <!-- ★ AI 入口卡片 -->
+      <div class="ai-entry-card">
+        <div class="ai-entry-title">✨ AI 智能规划</div>
+        <div class="ai-entry-sub">告诉我你的偏好，为你定制专属太原旅行路线</div>
+        <div class="ai-entry-tags">
+          <span>🎯 自动排程</span>
+          <span>💰 预算估算</span>
+          <span>📍 景点推荐</span>
+          <span>🍜 美食搭配</span>
+        </div>
+      </div>
+
+      <!-- 现有路线 Chip -->
+      <div class="route-chips">
+        <div class="chip on">龙城印象</div>
+        <div class="chip">古建寻踪</div>
+        <div class="chip">太原味道</div>
+        <div class="chip">亲子探索</div>
+        <div class="chip">山水之旅</div>
+      </div>
+
+      <div class="route-header">
+        <div>
+          <div class="route-title">龙城印象</div>
+          <div class="route-sub">1天 · 3处打卡 · 城市经典</div>
+        </div>
+        <div class="badge-rec">推荐</div>
+      </div>
+
+      <div class="route-step">
+        <div class="step-spine"><div class="step-dot">1</div><div class="step-line"></div></div>
+        <div class="step-body">
+          <div class="step-name">山西博物院</div>
+          <div class="step-desc">从史前到明清，两小时穿越三晋五千年</div>
+          <div class="step-time">🕐 09:00</div>
+        </div>
+      </div>
+      <div class="route-step">
+        <div class="step-spine"><div class="step-dot">2</div><div class="step-line"></div></div>
+        <div class="step-body">
+          <div class="step-name">永祚寺双塔</div>
+          <div class="step-desc">登塔俯瞰太原城，赏明代牡丹园</div>
+          <div class="step-time">🕐 13:00</div>
+        </div>
+      </div>
+      <div class="route-step">
+        <div class="step-spine"><div class="step-dot">3</div></div>
+        <div class="step-body">
+          <div class="step-name">汾河公园 · 日落</div>
+          <div class="step-desc">汾河晚风，夕阳映双塔</div>
+          <div class="step-time">🕐 17:00</div>
+        </div>
+      </div>
+
+      <div class="copy-btn">📋 复制路线</div>
+      <div class="route-stats">
+        <div class="stat-box"><div class="stat-num">1</div><div class="stat-lbl">天</div></div>
+        <div class="stat-box"><div class="stat-num">3</div><div class="stat-lbl">打卡点</div></div>
+        <div class="stat-box"><div class="stat-num">¥150</div><div class="stat-lbl">预算/人</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="label">页面 A — 路线 Tab（含 AI 入口卡片）<br>点击卡片 → 弹出 AI 对话 Sheet</div>
+</div>
+
+<!-- ═══════ PAGE B: AI 对话 Sheet ═══════ -->
+<div>
+<div class="device">
+  <div class="screen" style="position:relative">
+    <div class="status-bar">
+      <span class="status-time">21:54</span>
+      <div class="status-icons">📶 🔋</div>
+    </div>
+    <div class="city-header">
+      <div class="city-emoji">🗺️</div>
+      <div class="city-prov-pill"><span>山西省省会</span></div>
+      <div class="city-name">太原</div>
+      <div class="city-slogan">锦绣太原城 · 龙城文脉 · 汾河烟火</div>
+    </div>
+    <div class="tabs">
+      <div class="tab-item">介绍</div><div class="tab-item">景点</div>
+      <div class="tab-item">美食</div><div class="tab-item on">路线</div>
+    </div>
+
+    <div class="screen-scroll" style="filter:brightness(0.8)">
+      <!-- 路线内容虚化背景 -->
+      <div style="padding:12px 18px;color:var(--ink4);font-size:10px">路线列表 ······</div>
+      <div class="route-chips">
+        <div class="chip on">龙城印象</div><div class="chip">古建寻踪</div><div class="chip">太原味道</div>
+      </div>
+    </div>
+
+    <!-- Sheet 覆盖层 -->
+    <div class="sheet-overlay">
+      <div class="ai-sheet">
+        <div class="sheet-handle"></div>
+        <div class="sheet-title-row">
+          <span class="sheet-title">✨ AI 规划助手</span>
+          <span class="sheet-close">✕</span>
+        </div>
+
+        <!-- 快捷建议 -->
+        <div class="quick-suggest">
+          <span class="quick-chip">🏯 2天1夜经典游</span>
+          <span class="quick-chip">🍜 美食之旅半日</span>
+          <span class="quick-chip">👨‍👩‍👧 亲子一日游</span>
+          <span class="quick-chip">🏔️ 自然风光1天</span>
+        </div>
+
+        <!-- 对话区域 -->
+        <div class="chat-area">
+          <div class="chat-msg user">我想带父母在太原玩1天，不要太累，有文化底蕴的景点</div>
+          <div class="chat-msg ai">
+            <div class="typing"><span></span><span></span><span></span></div>
+          </div>
+        </div>
+
+        <!-- 输入区 -->
+        <div class="input-row">
+          <input class="input-box" placeholder="描述你的旅行需求...">
+          <button class="send-btn">→</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="label">页面 B — AI 对话 Sheet<br>底部弹出，快捷建议 + 输入框</div>
+</div>
+
+<!-- ═══════ PAGE C: AI 生成结果 ═══════ -->
+<div>
+<div class="device">
+  <div class="screen">
+    <div class="status-bar">
+      <span class="status-time">21:55</span>
+      <div class="status-icons">📶 🔋</div>
+    </div>
+
+    <!-- 结果页顶部 -->
+    <div style="padding:14px 18px 0;display:flex;align-items:center;justify-content:space-between;flex-shrink:0">
+      <div style="display:flex;align-items:center;gap:6px">
+        <span style="font-size:16px;cursor:pointer">←</span>
+        <span style="font-family:var(--serif);font-size:14px;font-weight:600;color:var(--ink)">AI 规划结果</span>
+        <span class="ai-badge">AI</span>
+      </div>
+    </div>
+
+    <div class="ai-result-header">
+      <span class="ai-query">「带父母太原1日游，不太累，有文化底蕴」</span>
+      <span class="ai-edit">✎ 修改</span>
+    </div>
+
+    <div class="screen-scroll">
+      <!-- 生成的路线卡片 -->
+      <div class="ai-route-card">
+        <div class="ai-route-card-header">
+          <div>
+            <div class="ai-route-card-title">孝心之旅 · 龙城文脉</div>
+            <div class="ai-route-card-sub">1天 · 3处打卡 · 节奏舒缓</div>
+          </div>
+          <div class="ai-route-card-badge">AI 定制</div>
+        </div>
+
+        <div class="route-step ai-step">
+          <div class="step-spine"><div class="step-dot">1</div><div class="step-line"></div></div>
+          <div class="step-body">
+            <div class="step-name">山西博物院</div>
+            <div class="step-desc">三晋文化精华，展厅平坦适合老人，可租轮椅</div>
+            <div class="step-time">🕐 09:30 — 11:30</div>
+          </div>
+        </div>
+        <div class="route-step ai-step">
+          <div class="step-spine"><div class="step-dot">2</div><div class="step-line"></div></div>
+          <div class="step-body">
+            <div class="step-name">太原面食店 · 午餐</div>
+            <div class="step-desc">品尝地道刀削面，环境舒适，适合家庭聚餐</div>
+            <div class="step-time">🕐 12:00 — 13:00</div>
+          </div>
+        </div>
+        <div class="route-step ai-step">
+          <div class="step-spine"><div class="step-dot">3</div></div>
+          <div class="step-body">
+            <div class="step-name">永祚寺双塔 · 牡丹园</div>
+            <div class="step-desc">明代古塔，园内平坦可慢行，无需登塔即可赏景</div>
+            <div class="step-time">🕐 14:00 — 16:00</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="route-stats">
+        <div class="stat-box"><div class="stat-num">1</div><div class="stat-lbl">天</div></div>
+        <div class="stat-box"><div class="stat-num">3</div><div class="stat-lbl">打卡点</div></div>
+        <div class="stat-box"><div class="stat-num">¥80</div><div class="stat-lbl">预算/人</div></div>
+      </div>
+
+      <!-- 操作按钮 -->
+      <div class="ai-actions">
+        <button class="ai-btn-primary">📋 保存到我的路线</button>
+        <button class="ai-btn-secondary">🔄 重新生成</button>
+      </div>
+
+      <div style="height:12px"></div>
+    </div>
+  </div>
+</div>
+<div class="label">页面 C — AI 生成结果<br>AI 定制路线 + 保存/重新生成</div>
+</div>
+
+<!-- ═══════ PAGE D: 介绍页 AI 入口横幅 ═══════ -->
+<div>
+<div class="device">
+  <div class="screen">
+    <div class="status-bar">
+      <span class="status-time">21:54</span>
+      <div class="status-icons">📶 🔋</div>
+    </div>
+    <div class="city-header">
+      <div class="city-emoji">🏯</div>
+      <div class="city-prov-pill"><span>山西省省会</span></div>
+      <div class="city-name">太原</div>
+      <div class="city-slogan">锦绣太原城 · 龙城文脉 · 汾河烟火</div>
+    </div>
+    <div class="tabs">
+      <div class="tab-item on">介绍</div><div class="tab-item">景点</div>
+      <div class="tab-item">美食</div><div class="tab-item">路线</div>
+    </div>
+
+    <div class="screen-scroll">
+      <!-- 视频占位 -->
+      <div style="height:140px;margin:14px 18px 12px;border-radius:14px;background:linear-gradient(135deg,#d4a574,#a8956a);display:flex;align-items:center;justify-content:center;font-size:48px">🏰</div>
+
+      <!-- 统计 -->
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;padding:0 18px 14px">
+        <div class="stat-box"><div class="stat-num">551万</div><div class="stat-lbl">城市人口</div></div>
+        <div class="stat-box"><div class="stat-num">2500+</div><div class="stat-lbl">年历史</div></div>
+        <div class="stat-box"><div class="stat-num">4A+</div><div class="stat-lbl">顶级景区</div></div>
+      </div>
+
+      <!-- ★ AI 横幅（介绍页入口） -->
+      <div class="ai-banner">
+        <div class="ai-banner-emoji">✨</div>
+        <div class="ai-banner-text">
+          <div class="ai-banner-title">AI 智能规划你的太原之行</div>
+          <div class="ai-banner-sub">输入偏好 → 自动生成专属路线</div>
+        </div>
+        <div class="ai-banner-arrow">→</div>
+      </div>
+
+      <!-- 介绍文本 -->
+      <div style="margin:0 18px 14px;background:var(--card);border-radius:14px;padding:12px 14px;font-size:11px;line-height:1.6;color:var(--ink3);border:1px solid var(--border2)">
+        太原古称晋阳、并州，也被称作"龙城"……
+      </div>
+
+      <!-- 标签 -->
+      <div style="padding:0 18px 8px;font-family:var(--serif);font-size:14px;font-weight:600;color:var(--ink)">城市标签</div>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;padding:0 18px 14px">
+        <span style="padding:6px 12px;border-radius:100px;border:1px solid var(--gold-bd);background:var(--gold-bg);font-size:10px;color:var(--gold);font-weight:500">国家历史文化名城</span>
+        <span style="padding:6px 12px;border-radius:100px;border:1px solid var(--border);background:var(--card);font-size:10px;color:var(--ink3)">龙城</span>
+        <span style="padding:6px 12px;border-radius:100px;border:1px solid var(--border);background:var(--card);font-size:10px;color:var(--ink3)">晋阳古都</span>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="label">页面 D — 介绍页 AI 入口横幅<br>备选位置，轻量入口</div>
+</div>
+
+</body>
+</html>

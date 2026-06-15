@@ -1,0 +1,469 @@
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@700&family=Noto+Sans+SC:wght@400;500;700&display=swap');
+:root{
+  --bg:#F2EDE4; --card:#FFFFFF; --card2:#F8F3EC;
+  --ink:#1E1810; --ink2:#3D3528; --ink3:#7A6E60; --ink4:#B0A494;
+  --red:#B84C2E; --red2:#D4613C;
+  --gold:#9B7A3A; --gold2:#C4A04E;
+  --gold-bg:rgba(155,122,58,0.12); --gold-bd:rgba(155,122,58,0.28);
+  --red-bg:rgba(184,76,46,0.10); --red-bd:rgba(184,76,46,0.22);
+  --border:rgba(30,24,16,0.08); --border2:rgba(30,24,16,0.05);
+  --shadow:0 3px 16px rgba(155,122,58,0.12),0 1px 4px rgba(30,24,16,0.06);
+  --serif:'Noto Serif SC',serif; --sans:'Noto Sans SC',sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#DDD5C8;font-family:var(--sans);display:flex;justify-content:center;padding:20px 12px 32px}
+
+.stage{display:flex;gap:24px;align-items:flex-start}
+
+/* ── device ── */
+.col{display:flex;flex-direction:column;align-items:center;gap:10px;flex-shrink:0}
+.lbl{font-size:11px;font-weight:600;color:#5a4e42;text-align:center}
+.lbl span{display:block;font-size:9px;color:#8a7e72;margin-top:2px;font-weight:400}
+
+.device{
+  width:272px; background:#1a1510; border-radius:50px; padding:10px;
+  box-shadow:0 24px 64px rgba(0,0,0,0.38),0 0 0 1px rgba(255,255,255,0.07);
+  position:relative;
+}
+.device::before{
+  content:'';position:absolute;top:10px;left:50%;transform:translateX(-50%);
+  width:78px;height:23px;background:#1a1510;
+  border-radius:0 0 16px 16px;z-index:20;
+  border:1px solid rgba(255,255,255,0.06);border-top:none;
+}
+.screen{
+  background:var(--bg);border-radius:40px;overflow:hidden;
+  height:580px;display:flex;flex-direction:column;
+}
+
+/* status */
+.sbar{height:34px;padding:10px 20px 0;display:flex;justify-content:space-between;align-items:center;flex-shrink:0}
+.sbar-t{font-size:11px;font-weight:700;color:var(--ink)}
+.sbar-r{display:flex;gap:4px;font-size:11px;color:var(--ink)}
+
+/* city header */
+.city-hd{padding:8px 18px 0;position:relative;flex-shrink:0}
+.prov-pill{display:inline-flex;align-items:center;background:var(--gold-bg);border:1px solid var(--gold-bd);border-radius:100px;padding:2px 9px;margin-bottom:4px}
+.prov-pill span{font-size:9px;font-weight:500;color:var(--gold)}
+.city-nm{font-family:var(--serif);font-size:30px;font-weight:700;color:var(--ink);letter-spacing:3px;line-height:1.1}
+.city-sl{font-size:9px;color:var(--ink3);margin-top:2px;letter-spacing:0.3px}
+.city-emo{position:absolute;right:14px;top:8px;font-size:44px;filter:drop-shadow(0 3px 6px rgba(0,0,0,0.12))}
+
+/* tabs */
+.tabs{display:flex;padding:0 18px;margin-top:10px;border-bottom:1.5px solid var(--border);flex-shrink:0}
+.tab{flex:1;text-align:center;padding:7px 0 8px;font-size:11px;color:var(--ink4);position:relative}
+.tab.on{color:var(--red);font-weight:700}
+.tab.on::after{content:'';position:absolute;bottom:-1.5px;left:15%;right:15%;height:2px;background:var(--red);border-radius:2px}
+
+/* ── FILTER CHIPS — sticky ── */
+.filter-wrap{
+  padding:10px 18px 8px;
+  display:flex;gap:7px;overflow-x:auto;scrollbar-width:none;
+  flex-shrink:0;
+  background:var(--bg);
+  border-bottom:1px solid var(--border2);
+}
+.filter-wrap::-webkit-scrollbar{display:none}
+.fchip{
+  flex-shrink:0;padding:5px 13px;border-radius:100px;
+  font-size:10px;font-weight:500;white-space:nowrap;
+  background:var(--card);color:var(--ink2);
+  border:1px solid var(--border);
+  box-shadow:0 1px 4px rgba(30,24,16,0.06);
+}
+.fchip.on{background:var(--red);color:#fff;border-color:var(--red);box-shadow:0 2px 8px rgba(184,76,46,0.28)}
+
+/* scroll */
+.scroll{flex:1;overflow-y:auto;overflow-x:hidden;scrollbar-width:none;padding-bottom:8px}
+.scroll::-webkit-scrollbar{display:none}
+
+/* ── SPOT CARD (large) ── */
+.spot-card{
+  margin:10px 14px 0;background:var(--card);border-radius:20px;
+  overflow:hidden;box-shadow:var(--shadow);border:1px solid rgba(255,255,255,0.56);
+}
+.spot-img{height:190px;position:relative;overflow:hidden;background:#d6cab8}
+.real-img{width:100%;height:100%;display:block;object-fit:cover}
+.spot-img .real-img{object-position:center 38%}
+.spot-img::after{
+  content:'';position:absolute;inset:0;
+  background:
+    linear-gradient(to bottom,rgba(30,24,16,0.06),rgba(30,24,16,0) 35%),
+    linear-gradient(to top,rgba(30,24,16,0.66),rgba(30,24,16,0) 48%);
+}
+.badge-grade{
+  position:absolute;top:10px;left:10px;z-index:2;
+  background:rgba(155,122,58,0.94);color:#fff;font-size:10px;font-weight:700;
+  padding:3px 8px;border-radius:8px;
+  box-shadow:0 2px 8px rgba(155,122,58,0.40);
+}
+.badge-price{
+  position:absolute;top:10px;right:10px;z-index:2;
+  color:#fff;font-size:9px;font-weight:700;
+  padding:3px 9px;border-radius:8px;
+}
+.photo-caption{
+  position:absolute;left:12px;right:12px;bottom:12px;z-index:2;
+  color:#f9f2e7;
+}
+.caption-kicker{font-size:9px;font-weight:700;letter-spacing:0.8px;opacity:.82}
+.caption-title{font-family:var(--serif);font-size:22px;line-height:1.05;letter-spacing:1px;margin-top:2px;text-shadow:0 2px 10px rgba(0,0,0,.28)}
+.spot-body{padding:11px 14px 14px}
+.spot-top{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+.spot-name{font-family:var(--serif);font-size:16px;font-weight:700;color:var(--ink);letter-spacing:0.5px}
+.spot-meta{font-size:9px;color:var(--ink4);margin-top:2px;white-space:nowrap}
+.rating{display:flex;align-items:center;gap:4px;margin-top:2px}
+.stars{font-size:10px;color:var(--gold2);letter-spacing:0.5px}
+.rval{font-size:11px;font-weight:700;color:var(--gold)}
+.rcnt{font-size:9px;color:var(--ink4)}
+.spot-desc{font-size:10px;color:var(--ink3);margin-top:5px;line-height:1.65}
+.spot-guide{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:10px;
+}
+.guide-cell{
+  background:var(--card2);border:1px solid var(--border2);border-radius:12px;
+  padding:7px 6px;min-width:0;
+}
+.guide-label{font-size:8px;color:var(--ink4);white-space:nowrap}
+.guide-val{font-size:10px;font-weight:700;color:var(--ink2);margin-top:2px;white-space:nowrap}
+.pills{display:flex;gap:5px;margin-top:8px;flex-wrap:wrap}
+.pill{display:inline-flex;align-items:center;padding:3px 9px;border-radius:100px;font-size:9px;font-weight:500}
+.pill-r{background:var(--red-bg);color:var(--red);border:1px solid var(--red-bd)}
+.pill-g{background:var(--gold-bg);color:var(--gold);border:1px solid var(--gold-bd)}
+.pill-n{background:rgba(30,24,16,0.05);color:var(--ink2);border:1px solid var(--border)}
+
+/* ── FOOD GRID ── */
+.food-grid{display:grid;grid-template-columns:1fr;gap:10px;padding:10px 14px 0}
+.food-card{
+  background:var(--card);border-radius:16px;overflow:hidden;
+  box-shadow:0 2px 10px rgba(155,122,58,0.10),0 1px 3px rgba(30,24,16,0.05);
+  display:flex;gap:10px;min-height:140px;border:1px solid rgba(255,255,255,0.56);
+}
+.food-img{width:126px;min-height:140px;position:relative;display:flex;align-items:center;justify-content:center;font-size:40px;overflow:hidden;flex-shrink:0;background-size:cover;background-position:center}
+.food-img .real-img{object-position:center 44%}
+.food-img::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(255,255,255,0),rgba(255,255,255,0.25));
+}
+.food-body{padding:12px 12px 12px 0;flex:1;display:flex;flex-direction:column;justify-content:center;min-width:0}
+.food-name{font-size:14px;font-weight:700;color:var(--ink)}
+.food-desc{font-size:10px;color:var(--ink3);margin-top:3px;line-height:1.5}
+.food-note{font-size:9px;color:var(--gold);font-weight:700;margin-top:7px}
+.heat{display:flex;gap:3px;margin-top:6px}
+.hd{width:6px;height:6px;border-radius:50%;background:var(--border)}
+.hd.on{background:var(--red2)}
+/* must-try badge on food card */
+.food-badge{
+  position:absolute;top:7px;right:7px;z-index:2;
+  font-size:8px;font-weight:700;padding:2px 6px;border-radius:6px;
+  color:#fff;
+}
+
+/* bottom nav */
+.bnav{display:flex;justify-content:space-around;padding:9px 0 13px;border-top:1px solid var(--border);background:var(--bg);flex-shrink:0}
+.nb{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:9px;color:var(--ink4)}
+.nb.on{color:var(--red)}
+
+/* ── BAOYU-DESIGN: spot card opens full-screen vertical gallery ── */
+.spot-card{position:relative;cursor:pointer}
+.spot-card::before{
+  content:'📷 点击看图集';
+  position:absolute;right:12px;top:158px;z-index:6;
+  padding:4px 8px;border-radius:999px;
+  background:rgba(30,24,16,.66);color:#fff;
+  font-size:9px;font-weight:700;
+  backdrop-filter:blur(8px);
+  box-shadow:0 3px 12px rgba(0,0,0,.18);
+}
+.spot-card:active{transform:scale(.992)}
+.interaction-note{
+  margin:10px 14px 0;padding:9px 10px;border-radius:14px;
+  background:rgba(184,76,46,.08);border:1px dashed rgba(184,76,46,.28);
+  color:var(--red);font-size:9px;line-height:1.5;font-weight:600;
+}
+.gallery-screen{
+  position:relative;height:580px;background:#11100E;border-radius:40px;
+  overflow:hidden;color:#fff;display:flex;flex-direction:column;
+}
+.gallery-top{
+  position:absolute;top:0;left:0;right:0;z-index:10;
+  padding:10px 16px 12px;
+  background:linear-gradient(to bottom,rgba(0,0,0,.72),rgba(0,0,0,0));
+}
+.gallery-sbar{height:24px;display:flex;justify-content:space-between;align-items:center}
+.gallery-sbar span{font-size:11px;font-weight:700}
+.gallery-head{display:flex;align-items:center;justify-content:space-between;margin-top:6px}
+.back-gesture{
+  display:inline-flex;align-items:center;gap:4px;
+  padding:4px 8px;border-radius:999px;
+  background:rgba(255,255,255,.14);font-size:9px;font-weight:700;
+  backdrop-filter:blur(8px);
+}
+.gallery-title{text-align:right}
+.gallery-title b{display:block;font-family:var(--serif);font-size:15px;letter-spacing:.8px}
+.gallery-title span{display:block;font-size:8px;color:rgba(255,255,255,.7);margin-top:1px}
+.gallery-scroll{
+  height:100%;overflow-y:auto;scroll-snap-type:y mandatory;
+  scrollbar-width:none;background:#11100E;
+}
+.gallery-scroll::-webkit-scrollbar{display:none}
+.gallery-item{
+  height:580px;position:relative;scroll-snap-align:start;
+  display:flex;align-items:center;justify-content:center;
+  background:#11100E;
+}
+.gallery-item img{
+  width:100%;height:100%;object-fit:cover;display:block;
+}
+.gallery-item::after{
+  content:'';position:absolute;inset:0;
+  background:
+    linear-gradient(to bottom,rgba(0,0,0,.55),rgba(0,0,0,0) 26%),
+    linear-gradient(to top,rgba(0,0,0,.72),rgba(0,0,0,0) 34%);
+}
+.gallery-caption{
+  position:absolute;left:16px;right:16px;bottom:22px;z-index:2;
+}
+.gallery-caption .idx{
+  display:inline-flex;align-items:center;margin-bottom:7px;
+  padding:3px 7px;border-radius:999px;
+  background:rgba(255,255,255,.14);font-size:8px;font-weight:700;
+  backdrop-filter:blur(8px);
+}
+.gallery-caption h3{
+  font-family:var(--serif);font-size:22px;line-height:1.08;letter-spacing:1px;
+  margin-bottom:5px;text-shadow:0 2px 12px rgba(0,0,0,.35);
+}
+.gallery-caption p{font-size:10px;line-height:1.55;color:rgba(255,255,255,.82)}
+.swipe-hint{
+  position:absolute;right:10px;top:50%;transform:translateY(-50%);
+  z-index:9;writing-mode:vertical-rl;
+  padding:8px 4px;border-radius:999px;
+  background:rgba(255,255,255,.12);font-size:8px;font-weight:700;
+  color:rgba(255,255,255,.8);backdrop-filter:blur(8px);
+}
+.scroll-hint{
+  position:absolute;left:50%;bottom:8px;transform:translateX(-50%);
+  z-index:12;font-size:8px;color:rgba(255,255,255,.72);
+  background:rgba(0,0,0,.35);padding:3px 8px;border-radius:999px;
+}
+.gallery-progress{
+  position:absolute;left:8px;top:46%;z-index:11;
+  display:flex;flex-direction:column;gap:4px;
+}
+.gallery-progress i{
+  width:3px;height:13px;border-radius:999px;background:rgba(255,255,255,.3);
+}
+.gallery-progress i.on{height:24px;background:#fff}
+
+</style>
+
+<div class="stage">
+
+<!-- ═══ PAGE 1: 景点 ═══ -->
+<div class="col">
+  <div class="device">
+    <div class="screen">
+      <div class="sbar">
+        <span class="sbar-t">21:54</span>
+        <div class="sbar-r">
+          <i class="ti ti-wifi" style="font-size:12px"></i>
+          <i class="ti ti-battery" style="font-size:12px"></i>
+        </div>
+      </div>
+
+      <div class="city-hd">
+        <div class="city-emo">🌲</div>
+        <div class="prov-pill"><span>山西省省会</span></div>
+        <div class="city-nm">太原</div>
+        <div class="city-sl">锦绣太原城 · 龙城文脉 · 汾河烟火</div>
+      </div>
+
+      <div class="tabs">
+        <div class="tab">介绍</div>
+        <div class="tab on">景点</div>
+        <div class="tab">美食</div>
+        <div class="tab">路线</div>
+      </div>
+
+      <!-- 吸顶筛选标签 -->
+      <div class="filter-wrap">
+        <div class="fchip on">全部</div>
+        <div class="fchip">古建</div>
+        <div class="fchip">博物馆</div>
+        <div class="fchip">公园</div>
+        <div class="fchip">免费</div>
+      </div>
+
+      <div class="scroll">
+        <div class="interaction-note">交互说明：点击任意景点卡片 → 打开该景点全屏图集；图集中上下滑动看图，右滑返回列表。</div>
+
+        <div class="spot-card">
+          <div class="spot-img">
+            <img class="real-img" src="📿晋祠保姆级攻略｜一篇吃透所有必看景点_1_爱生活的李小猫🐾_来自小红书网页版.jpg" alt="晋祠古建木雕龙纹">
+            <div class="badge-grade">5A</div>
+            <div class="badge-price" style="background:var(--red)">¥80</div>
+            <div class="photo-caption">
+              <div class="caption-kicker">JINCI TEMPLE</div>
+              <div class="caption-title">晋祠必看</div>
+            </div>
+          </div>
+          <div class="spot-body">
+            <div class="spot-top">
+              <div>
+                <div class="spot-name">晋祠</div>
+                <div class="rating">
+                  <span class="stars">★★★★★</span>
+                  <span class="rval">4.9</span>
+                  <span class="rcnt">· 2.1万人去过</span>
+                </div>
+              </div>
+              <div class="spot-meta">距市区约 25km</div>
+            </div>
+            <div class="spot-desc">中国现存最早的皇家园林祠堂，木雕、彩绘、匾额和古树都值得放慢看。</div>
+            <div class="spot-guide">
+              <div class="guide-cell">
+                <div class="guide-label">建议时长</div>
+                <div class="guide-val">3 小时</div>
+              </div>
+              <div class="guide-cell">
+                <div class="guide-label">看点</div>
+                <div class="guide-val">圣母殿</div>
+              </div>
+              <div class="guide-cell">
+                <div class="guide-label">适合</div>
+                <div class="guide-val">古建控</div>
+              </div>
+            </div>
+            <div class="pills">
+              <span class="pill pill-r">¥80 / 人</span>
+              <span class="pill pill-g">周柏唐槐</span>
+              <span class="pill pill-n">避开正午</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="spot-card">
+          <div class="spot-img">
+            <img class="real-img" src="📿晋祠保姆级攻略｜一篇吃透所有必看景点_1_爱生活的李小猫🐾_来自小红书网页版.jpg" alt="晋祠古建牌匾与彩绘细节">
+            <div class="badge-grade">细节</div>
+            <div class="badge-price" style="background:var(--gold)">拍照点</div>
+            <div class="photo-caption">
+              <div class="caption-kicker">WOOD CARVING</div>
+              <div class="caption-title">木雕彩绘</div>
+            </div>
+          </div>
+          <div class="spot-body">
+            <div class="spot-top">
+              <div>
+                <div class="spot-name">晋祠古建细节</div>
+                <div class="rating">
+                  <span class="stars">★★★★★</span>
+                  <span class="rval">4.8</span>
+                  <span class="rcnt">· 出片率高</span>
+                </div>
+              </div>
+              <div class="spot-meta">上午光线更好</div>
+            </div>
+            <div class="spot-desc">檐下斗拱、龙纹木雕、彩绘匾额层次丰富，适合近距离观察传统工艺。</div>
+            <div class="spot-guide">
+              <div class="guide-cell">
+                <div class="guide-label">机位</div>
+                <div class="guide-val">仰拍</div>
+              </div>
+              <div class="guide-cell">
+                <div class="guide-label">镜头</div>
+                <div class="guide-val">2x 更稳</div>
+              </div>
+              <div class="guide-cell">
+                <div class="guide-label">重点</div>
+                <div class="guide-val">木雕龙</div>
+              </div>
+            </div>
+            <div class="pills">
+              <span class="pill pill-g">图案密集</span>
+              <span class="pill pill-n">注意暗部</span>
+              <span class="pill pill-r">必拍</span>
+            </div>
+          </div>
+        </div>
+
+        <div style="height:8px"></div>
+      </div>
+    </div>
+  </div>
+  <div class="lbl">① 景点列表<span>卡片介绍基本信息 · 点击打开图集</span></div>
+</div>
+
+
+<!-- ═══ PAGE 2: 景点全屏图集 ═══ -->
+<div class="col">
+  <div class="device">
+    <div class="gallery-screen">
+      <div class="gallery-top">
+        <div class="gallery-sbar">
+          <span>21:54</span>
+          <span>•••</span>
+        </div>
+        <div class="gallery-head">
+          <div class="back-gesture">← 右滑返回列表</div>
+          <div class="gallery-title">
+            <b>晋祠图集</b>
+            <span>上下滑动查看图片</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="gallery-progress">
+        <i class="on"></i><i></i><i></i><i></i>
+      </div>
+      <div class="swipe-hint">右滑返回</div>
+
+      <div class="gallery-scroll">
+        <section class="gallery-item">
+          <img src="📿晋祠保姆级攻略｜一篇吃透所有必看景点_1_爱生活的李小猫🐾_来自小红书网页版.jpg" alt="晋祠木雕龙纹大图">
+          <div class="gallery-caption">
+            <div class="idx">1 / 4</div>
+            <h3>圣母殿木雕龙纹</h3>
+            <p>点击景点卡片后直接进入全屏图集，图片占满屏幕，强调沉浸浏览。</p>
+          </div>
+        </section>
+
+        <section class="gallery-item">
+          <img src="📿晋祠保姆级攻略｜一篇吃透所有必看景点_1_爱生活的李小猫🐾_来自小红书网页版.jpg" alt="晋祠古建彩绘细节">
+          <div class="gallery-caption">
+            <div class="idx">2 / 4</div>
+            <h3>檐下彩绘细节</h3>
+            <p>图集采用上下滑动切换，不再进入多层详情页，操作路径更短。</p>
+          </div>
+        </section>
+
+        <section class="gallery-item">
+          <img src="📿晋祠保姆级攻略｜一篇吃透所有必看景点_1_爱生活的李小猫🐾_来自小红书网页版.jpg" alt="晋祠牌匾与斗拱">
+          <div class="gallery-caption">
+            <div class="idx">3 / 4</div>
+            <h3>牌匾与斗拱</h3>
+            <p>底部只保留图片说明和序号，避免把图集做成复杂详情页。</p>
+          </div>
+        </section>
+
+        <section class="gallery-item">
+          <img src="📿晋祠保姆级攻略｜一篇吃透所有必看景点_1_爱生活的李小猫🐾_来自小红书网页版.jpg" alt="晋祠古建空间">
+          <div class="gallery-caption">
+            <div class="idx">4 / 4</div>
+            <h3>古建空间感</h3>
+            <p>右滑返回列表，符合移动端图片浏览的轻量返回习惯。</p>
+          </div>
+        </section>
+      </div>
+
+      <div class="scroll-hint">↑ 上下滑动查看更多图片 ↓</div>
+    </div>
+  </div>
+  <div class="lbl">② 点击卡片后的图集<span>全屏图片 · 上下滑动 · 右滑返回</span></div>
+</div>
+
+
+</div>

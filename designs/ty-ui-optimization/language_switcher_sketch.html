@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>语言切换草图</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#1a1a2e;display:flex;justify-content:center;padding:30px;gap:40px;flex-wrap:wrap;font-family:'PingFang SC','Apple SD Gothic Neo',sans-serif}
+
+.phone{width:200px;border-radius:28px;overflow:hidden;border:5px solid #1a1a1a;background:#0a0a0a}
+.notch{width:52px;height:16px;background:#1a1a1a;border-radius:0 0 10px 10px;margin:0 auto;position:relative;z-index:10}
+.screen{overflow:hidden;background:#0d0d14;padding-top:18px}
+.hero{position:relative;height:130px;background:linear-gradient(135deg,#28150F 0%,#14202A 56%,#0D0D14 100%);overflow:hidden}
+.hero-deco{position:absolute;right:-10px;top:-10px;font-size:80px;opacity:0.1;font-weight:700;color:#C8A96E}
+.hero-back{position:absolute;top:10px;left:14px;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:rgba(246,241,233,0.7);font-size:14px}
+.hero-lang{position:absolute;top:10px;right:14px;width:30px;height:30px;border-radius:50%;background:rgba(200,169,110,0.15);border:1px solid rgba(200,169,110,0.3);display:flex;align-items:center;justify-content:center;font-size:15px;color:#C8A96E;cursor:pointer}
+.hero-txt{position:absolute;bottom:14px;left:16px;right:50px}
+.pill{display:inline-block;padding:2px 8px;border-radius:20px;background:rgba(200,169,110,0.18);color:#C8A96E;border:0.5px solid rgba(200,169,110,0.3);font-size:7px;font-weight:500}
+.city{font-size:24px;font-weight:600;color:#F6F1E9;margin-top:4px}
+.sub{font-size:8px;color:rgba(246,241,233,0.5);margin-top:2px}
+
+.tabs{display:flex;border-bottom:0.5px solid rgba(246,241,233,0.08);padding:0 10px;height:36px}
+.tab{flex:1;text-align:center;font-size:9px;padding:10px 0;color:rgba(246,241,233,0.32);position:relative}
+.tab.on{color:#C8A96E;font-weight:600}
+.tab.on::after{content:'';position:absolute;bottom:0;left:25%;right:25%;height:1.5px;background:#C8A96E;border-radius:2px}
+
+.content{padding:10px 14px;height:100px;background:#0d0d14}
+.stat-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px}
+.stat{background:#161622;border-radius:8px;padding:6px 4px;text-align:center}
+.stat-n{font-size:11px;font-weight:600;color:#C8A96E}
+.stat-l{font-size:7px;color:rgba(246,241,233,0.35);margin-top:1px}
+
+.btm-nav{display:flex;justify-content:space-around;padding:8px 0 6px;border-top:0.5px solid rgba(246,241,233,0.07)}
+.bn{display:flex;flex-direction:column;align-items:center;gap:1px;font-size:7px;color:rgba(246,241,233,0.3)}
+.bn.on{color:#C8A96E}
+
+/* ── 图1标注 ── */
+.col{display:flex;flex-direction:column;align-items:center;gap:12px}
+.label{color:rgba(246,241,233,0.6);font-size:11px;text-align:center}
+.arrow-pin{font-size:22px;color:#e05c30;line-height:1}
+.pin-text{font-size:9px;color:#e05c30;font-weight:600}
+
+/* ── 弹窗样式 ── */
+.overlay{position:absolute;inset:0;background:rgba(0,0,0,0.5);display:flex;align-items:flex-end;z-index:20}
+.sheet{width:100%;background:#161622;border-radius:16px 16px 0 0;padding:0 0 20px}
+.sheet-handle{width:28px;height:4px;background:rgba(246,241,233,0.2);border-radius:4px;margin:10px auto 14px}
+.sheet-title{font-size:11px;font-weight:600;color:#F6F1E9;text-align:center;margin-bottom:12px}
+.lang-item{display:flex;align-items:center;gap:10px;padding:10px 18px;margin:0 10px;border-radius:10px;color:#F6F1E9;font-size:12px}
+.lang-item.sel{background:rgba(200,169,110,0.1);border:1px solid rgba(200,169,110,0.25)}
+.lang-item:not(.sel){border:1px solid transparent;opacity:0.55}
+.lang-flag{font-size:20px}
+.lang-name{font-weight:500}
+.lang-native{font-size:9px;color:rgba(246,241,233,0.4);margin-left:auto}
+.lang-check{color:#C8A96E;font-size:14px;margin-left:4px}
+</style>
+</head>
+<body>
+
+<!-- ════════ 图1: 语言按钮位置 ════════ -->
+<div class="col">
+  <div class="phone">
+    <div class="notch"></div>
+    <div class="screen">
+      <div class="hero" style="height:120px">
+        <div class="hero-deco">晋</div>
+        <div class="hero-back">‹</div>
+        <!-- ★ 语言切换按钮 ★ -->
+        <div class="hero-lang" style="
+          background:rgba(200,169,110,0.18);
+          border:1.5px solid #C8A96E;
+          box-shadow:0 0 8px rgba(200,169,110,0.3);
+        ">🌐</div>
+        <div class="hero-txt">
+          <div class="pill">山西省省会</div>
+          <div class="city">太原</div>
+          <div class="sub">锦绣太原城 · 龙城文脉 · 汾河烟火</div>
+        </div>
+      </div>
+      <div class="tabs">
+        <div class="tab on">介绍</div><div class="tab">景点</div><div class="tab">美食</div><div class="tab">路线</div>
+      </div>
+      <div class="content">
+        <div class="stat-row">
+          <div class="stat"><div class="stat-n">551万</div><div class="stat-l">城市人口</div></div>
+          <div class="stat"><div class="stat-n">2500+</div><div class="stat-l">年历史</div></div>
+          <div class="stat"><div class="stat-n">4A+</div><div class="stat-l">顶级景区</div></div>
+        </div>
+      </div>
+      <div class="btm-nav">
+        <div class="bn on">🏠 首页</div><div class="bn">👤 我的</div>
+      </div>
+    </div>
+  </div>
+  <div class="label">
+    <div class="arrow-pin">⤴</div>
+    <div class="pin-text">语言按钮<br>Hero 右上角</div>
+  </div>
+</div>
+
+<!-- ════════ 图2: 点击后弹出语言选择 ════════ -->
+<div class="col">
+  <div class="phone" style="position:relative">
+    <div class="notch"></div>
+    <div class="screen" style="position:relative;height:420px">
+      <div class="hero" style="height:120px">
+        <div class="hero-deco">晋</div>
+        <div class="hero-back">‹</div>
+        <div class="hero-lang">🌐</div>
+        <div class="hero-txt">
+          <div class="pill">山西省省会</div>
+          <div class="city">太原</div>
+          <div class="sub">锦绣太原城 · 龙城文脉 · 汾河烟火</div>
+        </div>
+      </div>
+      <div class="tabs">
+        <div class="tab on">介绍</div><div class="tab">景点</div><div class="tab">美食</div><div class="tab">路线</div>
+      </div>
+      <div class="content">
+        <div class="stat-row">
+          <div class="stat"><div class="stat-n">551万</div><div class="stat-l">城市人口</div></div>
+          <div class="stat"><div class="stat-n">2500+</div><div class="stat-l">年历史</div></div>
+          <div class="stat"><div class="stat-n">4A+</div><div class="stat-l">顶级景区</div></div>
+        </div>
+      </div>
+
+      <!-- ★ 语言选择 Bottom Sheet ★ -->
+      <div class="overlay">
+        <div class="sheet">
+          <div class="sheet-handle"></div>
+          <div class="sheet-title">🌐  选择语言 / Language / 언어 선택</div>
+
+          <div class="lang-item sel">
+            <span class="lang-flag">🇨🇳</span>
+            <span class="lang-name">中文</span>
+            <span class="lang-native">简体中文</span>
+            <span class="lang-check">✓</span>
+          </div>
+          <div class="lang-item">
+            <span class="lang-flag">🇺🇸</span>
+            <span class="lang-name">English</span>
+            <span class="lang-native">English</span>
+          </div>
+          <div class="lang-item">
+            <span class="lang-flag">🇰🇷</span>
+            <span class="lang-name">한국어</span>
+            <span class="lang-native">Korean</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="label">
+    <div class="arrow-pin">⤴</div>
+    <div class="pin-text">点击 🌐 弹出<br>Bottom Sheet</div>
+  </div>
+</div>
+
+<!-- ════════ 图3: 切换英语后效果 ════════ -->
+<div class="col">
+  <div class="phone">
+    <div class="notch"></div>
+    <div class="screen">
+      <div class="hero" style="height:120px">
+        <div class="hero-deco">晋</div>
+        <div class="hero-back">‹</div>
+        <div class="hero-lang" style="
+          background:rgba(200,169,110,0.18);
+          border:1.5px solid rgba(200,169,110,0.4);
+        ">🌐</div>
+        <div class="hero-txt">
+          <div class="pill">Shanxi Capital</div>
+          <div class="city">Taiyuan</div>
+          <div class="sub">Dragon City · Fen River · Ancient Heritage</div>
+        </div>
+      </div>
+      <div class="tabs">
+        <div class="tab on">Intro</div><div class="tab">Spots</div><div class="tab">Food</div><div class="tab">Route</div>
+      </div>
+      <div class="content">
+        <div class="stat-row">
+          <div class="stat"><div class="stat-n">5.51M</div><div class="stat-l">Population</div></div>
+          <div class="stat"><div class="stat-n">2500+</div><div class="stat-l">Yrs History</div></div>
+          <div class="stat"><div class="stat-n">4A+</div><div class="stat-l">Scenic Spots</div></div>
+        </div>
+      </div>
+      <div class="btm-nav">
+        <div class="bn on">🏠 Home</div><div class="bn">👤 Profile</div>
+      </div>
+    </div>
+  </div>
+  <div class="label">切换英语后的效果</div>
+</div>
+
+</body>
+</html>

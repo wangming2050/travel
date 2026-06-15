@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>纯代码视觉增强</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#0D0D14;font-family:'PingFang SC',sans-serif;padding:20px;color:#F6F1E9}
+h2{font-size:14px;margin:20px 0 10px;color:#C8A96E}
+.grid{display:flex;gap:14px;flex-wrap:wrap}
+.card{width:172px;border-radius:14px;overflow:hidden;border:1px solid rgba(255,255,255,0.06);background:#161622;flex-shrink:0}
+
+/* ═══════ 1. 玻璃拟态 ═══════ */
+.glass{background:rgba(22,22,34,0.6);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.08)}
+.glass-bg{background:linear-gradient(135deg,#1a1028 0%,#0f1a14 50%,#081420 100%);height:90px;position:relative}
+.glass-bg .blob{position:absolute;border-radius:50%;filter:blur(30px);opacity:0.4}
+.glass-bg .blob:nth-child(1){width:60px;height:60px;background:#C8A96E;top:10px;left:20px}
+.glass-bg .blob:nth-child(2){width:40px;height:40px;background:#a08050;bottom:5px;right:15px}
+.glass-panel{margin:10px;padding:10px 12px;border-radius:10px}
+.glass-panel .title{font-size:11px;font-weight:600}
+.glass-panel .sub{font-size:8px;opacity:0.5;margin-top:2px}
+
+/* ═══════ 2. 动态渐变背景 ═══════ */
+@keyframes shift{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+.animated-grad{height:80px;background:linear-gradient(-45deg,#1a1028,#14202A,#0D0D14,#1a1028);background-size:300% 300%;animation:shift 6s ease infinite;display:flex;align-items:center;justify-content:center;font-size:22px}
+
+/* ═══════ 3. 几何装饰 ═══════ */
+.geo-card{position:relative;height:140px;overflow:hidden}
+.geo-card .bg{position:absolute;inset:0;background:linear-gradient(135deg,#1a1028,#0f1a14)}
+.geo-card .ring{position:absolute;border-radius:50%;border:1px solid rgba(255,255,255,0.04)}
+.geo-card .ring:nth-child(2){width:180px;height:180px;top:-60px;right:-40px}
+.geo-card .ring:nth-child(3){width:120px;height:120px;bottom:-30px;left:-20px;border-color:rgba(255,255,255,0.06)}
+.geo-card .ring:nth-child(4){width:60px;height:60px;top:30px;left:40px;border-color:rgba(200,169,110,0.1)}
+.geo-card .dot-grid{position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,0.04) 1px,transparent 1px);background-size:16px 16px}
+.geo-card .content{position:relative;z-index:1;padding:14px}
+.geo-card .content .title{font-size:13px;font-weight:600}
+.geo-card .content .desc{font-size:8px;opacity:0.5;margin-top:3px;line-height:1.5}
+
+/* ═══════ 4. 推荐城市卡片 ═══════ */
+.city-rec{height:170px;position:relative;overflow:hidden;cursor:pointer}
+.city-rec .grad-bg{position:absolute;inset:0}
+.city-rec .grad-bg.taiyuan{background:linear-gradient(135deg,#28150F,#14202A,#0D0D14)}
+.city-rec .grad-bg.chengdu{background:linear-gradient(135deg,#1a0d08,#1a1028,#0D0D14)}
+.city-rec .grad-bg.beijing{background:linear-gradient(135deg,#1a0d08,#28150F,#0D0D14)}
+.city-rec .grad-bg.xian{background:linear-gradient(135deg,#1a1208,#141820,#0D0D14)}
+.city-rec .ornament{position:absolute;font-size:80px;opacity:0.06;right:-8px;top:-10px;user-select:none;font-weight:700;color:#C8A96E}
+.city-rec .city-emoji{position:absolute;font-size:36px;right:14px;top:12px;filter:drop-shadow(0 2px 8px rgba(0,0,0,0.3))}
+.city-rec .info{position:absolute;bottom:12px;left:14px}
+.city-rec .info .name{font-size:15px;font-weight:600;letter-spacing:1px}
+.city-rec .info .subtitle{font-size:8px;opacity:0.45;margin-top:2px}
+.city-rec .tags{position:absolute;bottom:12px;right:14px;display:flex;gap:4px}
+.city-rec .tags span{font-size:7px;padding:2px 6px;border-radius:10px;background:rgba(200,169,110,0.15);color:#C8A96E}
+
+/* ═══════ 5. 文字排版 ═══════ */
+.typo-demo{padding:12px}
+.typo-demo .kicker{font-size:8px;text-transform:uppercase;letter-spacing:3px;color:#C8A96E;margin-bottom:4px}
+.typo-demo .headline{font-size:20px;font-weight:300;line-height:1.2;letter-spacing:0.5px}
+.typo-demo .headline strong{font-weight:700}
+.typo-demo .body{font-size:9px;opacity:0.45;line-height:1.8;margin-top:6px;max-width:130px}
+.typo-demo .stat-line{display:flex;gap:12px;margin-top:8px}
+.typo-demo .stat-line div{text-align:center}
+.typo-demo .stat-line .num{font-size:16px;font-weight:200;color:#C8A96E}
+.typo-demo .stat-line .lbl{font-size:7px;opacity:0.35;margin-top:1px}
+
+/* ═══════ 6. 微粒子 ═══════ */
+@keyframes float{0%,100%{transform:translateY(0) rotate(0deg)}50%{transform:translateY(-8px) rotate(3deg)}}
+.particles{position:relative;height:80px;background:#161622;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:11px;color:#C8A96E}
+.particle{position:absolute;border-radius:50%;background:rgba(200,169,110,0.2);animation:float 4s ease-in-out infinite}
+.particle:nth-child(1){width:4px;height:4px;top:20px;left:20%;animation-delay:0s}
+.particle:nth-child(2){width:3px;height:3px;top:40px;left:60%;animation-delay:0.8s}
+.particle:nth-child(3){width:5px;height:5px;top:55px;left:35%;animation-delay:1.6s}
+.particle:nth-child(4){width:3px;height:3px;top:15px;left:75%;animation-delay:2.4s}
+.particle:nth-child(5){width:4px;height:4px;top:50px;right:15%;animation-delay:3.2s}
+</style>
+</head>
+<body>
+
+<h2>1. 玻璃拟态 (Glassmorphism)</h2>
+<div class="grid">
+  <div class="card glass-bg">
+    <div class="blob"></div><div class="blob"></div>
+    <div class="glass-panel glass">
+      <div class="title">🏯 晋祠</div>
+      <div class="sub">千年皇家祭祀园林 · 5A</div>
+    </div>
+  </div>
+  <div style="font-size:9px;opacity:0.4;max-width:150px;padding-top:20px">
+    面板用 backdrop-filter 毛玻璃效果<br>
+    背后彩色光斑缓慢浮动<br>
+    → 高级感，不依赖图片
+  </div>
+</div>
+
+<h2>2. 动态渐变背景</h2>
+<div class="grid">
+  <div class="card"><div class="animated-grad">🏯</div></div>
+  <div style="font-size:9px;opacity:0.4;max-width:150px;padding-top:20px">
+    CSS gradient 缓慢位移<br>
+    色彩在主题色之间流动<br>
+    像呼吸一样
+  </div>
+</div>
+
+<h2>3. 几何装饰 + 点阵纹理</h2>
+<div class="grid">
+  <div class="card geo-card">
+    <div class="bg"></div>
+    <div class="ring"></div><div class="ring"></div><div class="ring"></div>
+    <div class="dot-grid"></div>
+    <div class="content">
+      <div class="title">太原</div>
+      <div class="desc">龙城文脉 · 汾河烟火<br>2500 年建城史</div>
+    </div>
+  </div>
+  <div style="font-size:9px;opacity:0.4;max-width:150px;padding-top:20px">
+    同心圆环 + 点阵纹理<br>
+    纯代码绘制，不依赖图片<br>
+    → 科技感 + 东方美学
+  </div>
+</div>
+
+<h2>4. 推荐城市卡片 (新功能!)</h2>
+<div class="grid">
+  <div class="card city-rec"><div class="grad-bg taiyuan"></div><div class="ornament">太</div><div class="city-emoji">🏯</div><div class="info"><div class="name">太原</div><div class="subtitle">龙城文脉 · 山西</div></div><div class="tags"><span>15景点</span><span>10美食</span></div></div>
+  <div class="card city-rec"><div class="grad-bg chengdu"></div><div class="ornament">蓉</div><div class="city-emoji">🐼</div><div class="info"><div class="name">成都</div><div class="subtitle">天府之国 · 四川</div></div><div class="tags"><span>12景点</span><span>8美食</span></div></div>
+  <div class="card city-rec"><div class="grad-bg beijing"></div><div class="ornament">京</div><div class="city-emoji">🏛️</div><div class="info"><div class="name">北京</div><div class="subtitle">皇城根下 · 千年文脉</div></div><div class="tags"><span>20景点</span><span>12美食</span></div></div>
+  <div class="card city-rec"><div class="grad-bg xian"></div><div class="ornament">秦</div><div class="city-emoji">🗿</div><div class="info"><div class="name">西安</div><div class="subtitle">十三朝古都 · 陕西</div></div><div class="tags"><span>18景点</span><span>10美食</span></div></div>
+</div>
+
+<h2>5. 文字排版驱动</h2>
+<div class="grid">
+  <div class="card typo-demo">
+    <div class="kicker">SHANXI · TAIYUAN</div>
+    <div class="headline">龙城<br><strong>太原</strong></div>
+    <div class="body">晋祠、双塔、汾河两岸<br>古都的厚重与烟火气</div>
+    <div class="stat-line">
+      <div><div class="num">551万</div><div class="lbl">人口</div></div>
+      <div><div class="num">2500+</div><div class="lbl">年历史</div></div>
+      <div><div class="num">4A+</div><div class="lbl">景区</div></div>
+    </div>
+  </div>
+  <div style="font-size:9px;opacity:0.4;max-width:150px;padding-top:20px">
+    英文小标 + 极细体数字<br>
+    大字重对比 + 宽松行距<br>
+    → 杂志感排版
+  </div>
+</div>
+
+<h2>6. 浮动粒子</h2>
+<div class="grid">
+  <div class="card"><div class="particles">✦ 缓慢浮动 ✦<div class="particle"></div><div class="particle"></div><div class="particle"></div><div class="particle"></div><div class="particle"></div></div></div>
+  <div style="font-size:9px;opacity:0.4;max-width:150px;padding-top:20px">
+    金色微粒缓慢上下浮动<br>
+    Hero 背景或详情弹窗中<br>
+    → 活的感觉
+  </div>
+</div>
+
+</body>
+</html>

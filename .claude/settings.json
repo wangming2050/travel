@@ -1,0 +1,23 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(flutter build *)",
+      "Bash(flutter devices *)",
+      "Bash(flutter emulators *)",
+      "Bash(flutter analyze *)",
+      "Bash(flutter run *)",
+      "Bash(sed -i '' \"s|import 'taiyuan/taiyuan_intro.dart'|import 'ty_taiyuan/ty_taiyuan_intro.dart'|g\" /Users/king/Documents/leo/github_project/flutter_group1/lib/ty_taiyuan_app.dart)",
+      "Bash(sed -i '' \"s|import 'taiyuan/taiyuan_spots.dart'|import 'ty_taiyuan/ty_taiyuan_spots.dart'|g\" /Users/king/Documents/leo/github_project/flutter_group1/lib/ty_taiyuan_app.dart)",
+      "Bash(sed -i '' \"s|import 'taiyuan/taiyuan_food.dart'|import 'ty_taiyuan/ty_taiyuan_food.dart'|g\" /Users/king/Documents/leo/github_project/flutter_group1/lib/ty_taiyuan_app.dart)",
+      "Bash(sed -i '' \"s|import 'taiyuan/taiyuan_routes.dart'|import 'ty_taiyuan/ty_taiyuan_routes.dart'|g\" /Users/king/Documents/leo/github_project/flutter_group1/lib/ty_taiyuan_app.dart)",
+      "Bash(sed -i '' \"s|import 'taiyuan_app.dart'|import 'ty_taiyuan_app.dart'|g\" /Users/king/Documents/leo/github_project/flutter_group1/lib/main.dart)",
+      "Bash(sed -n '52,58p' lib/ty_taiyuan/ty_taiyuan_intro.dart)",
+      "Bash(sed -n '22,27p' lib/ty_taiyuan/ty_taiyuan_food.dart)",
+      "Bash(sed -n '92,96p' lib/ty_shared/ty_widgets.dart)",
+      "Bash(sed -n '52,57p' lib/ty_taiyuan/ty_taiyuan_intro.dart)",
+      "Bash(sed -n '95,97p' lib/ty_shared/ty_widgets.dart)",
+      "Bash(sed -n '24,27p' lib/ty_taiyuan/ty_taiyuan_food.dart)",
+      "Bash(curl -s http://localhost:8080/health)"
+    ]
+  }
+}

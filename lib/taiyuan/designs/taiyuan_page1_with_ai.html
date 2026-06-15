@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<style>
+:root {
+  --bg:        #F2EDE4;
+  --bg2:       #EAE2D6;
+  --bg3:       #DDD3C2;
+  --ink:       #1E1810;
+  --ink2:      #3D3528;
+  --ink3:      #7A6E60;
+  --ink4:      #A89E90;
+  --red:       #B84C2E;
+  --red2:      #D4613C;
+  --gold:      #9B7A3A;
+  --gold2:     #C4A04E;
+  --gold-bg:   rgba(155,122,58,0.10);
+  --gold-bd:   rgba(155,122,58,0.28);
+  --red-bg:    rgba(184,76,46,0.10);
+  --red-bd:    rgba(184,76,46,0.25);
+  --card:      #FFFFFF;
+  --card2:     #F8F3EC;
+  --border:    rgba(30,24,16,0.10);
+  --border2:   rgba(30,24,16,0.06);
+  --shadow:    0 2px 12px rgba(30,24,16,0.08);
+  --shadow2:   0 4px 20px rgba(30,24,16,0.12);
+  --serif:     'Noto Serif SC', serif;
+  --sans:      'Noto Sans SC', sans-serif;
+  --r-card:    14px;
+  --r-pill:    100px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: #E8E0D4; font-family: var(--sans); display: flex; align-items: center; justify-content: center; min-height: 100vh; }
+
+/* ── Stage ── */
+.stage {
+  display: flex;
+  gap: 24px;
+  padding: 20px 16px 28px;
+  align-items: flex-start;
+}
+
+/* ── Device shell ── */
+.device-wrap { display: flex; flex-direction: column; align-items: center; gap: 10px; flex-shrink: 0; }
+.device {
+  width: 260px;
+  background: #1a1510;
+  border-radius: 48px;
+  padding: 10px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.35), 0 0 0 1px rgba(255,255,255,0.08);
+  position: relative;
+}
+.device::before {
+  content: '';
+  position: absolute;
+  top: 10px; left: 50%; transform: translateX(-50%);
+  width: 80px; height: 24px;
+  background: #1a1510;
+  border-radius: 0 0 18px 18px;
+  z-index: 20;
+  border: 1px solid rgba(255,255,255,0.06);
+  border-top: none;
+}
+.screen {
+  background: var(--bg);
+  border-radius: 38px;
+  overflow: hidden;
+  height: 560px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+.screen-scroll {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: none;
+}
+.screen-scroll::-webkit-scrollbar { display: none; }
+
+.page-label {
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ink2);
+  text-align: center;
+}
+.page-label span {
+  display: block;
+  font-size: 10px;
+  color: var(--ink4);
+  margin-top: 2px;
+  font-weight: 400;
+}
+
+/* ── Status bar ── */
+.status-bar {
+  height: 32px;
+  padding: 8px 20px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-shrink: 0;
+}
+.status-time { font-size: 11px; font-weight: 600; color: var(--ink); }
+.status-icons { display: flex; gap: 4px; align-items: center; color: var(--ink); font-size: 11px; }
+
+/* ── City Header ── */
+.city-header {
+  padding: 12px 18px 0;
+  flex-shrink: 0;
+  position: relative;
+}
+.city-province-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--gold-bg);
+  border: 1px solid var(--gold-bd);
+  border-radius: var(--r-pill);
+  padding: 3px 10px;
+  margin-bottom: 6px;
+}
+.city-province-pill span { font-size: 10px; font-weight: 500; color: var(--gold); }
+.city-name {
+  font-family: var(--serif);
+  font-size: 34px;
+  font-weight: 700;
+  color: var(--ink);
+  letter-spacing: 3px;
+  line-height: 1.1;
+}
+.city-slogan {
+  font-size: 11px;
+  color: var(--ink3);
+  margin-top: 4px;
+  letter-spacing: 0.5px;
+}
+.city-emoji {
+  position: absolute;
+  right: 16px;
+  top: 16px;
+  font-size: 52px;
+  filter: drop-shadow(0 4px 8px rgba(0,0,0,0.15));
+  cursor: pointer;
+  transition: transform 0.2s ease;
+  user-select: none;
+}
+.city-emoji:hover {
+  transform: scale(1.08);
+}
+.city-emoji:active {
+  transform: scale(0.94);
+}
+
+/* 彩蛋：仅保留可点击 emoji，无任何提示 */
+.city-emoji-wrap {
+  position: absolute;
+  right: 16px;
+  top: 16px;
+}
+.city-emoji-icon {
+  font-size: 52px;
+  filter: drop-shadow(0 4px 8px rgba(0,0,0,0.15));
+  cursor: pointer;
+  transition: transform 0.2s ease;
+  user-select: none;
+  display: block;
+}
+.city-emoji-icon:active { transform: scale(0.94); }
+
+/* ── Tabs ── */
+.tabs {
+  display: flex;
+  padding: 0 18px;
+  margin-top: 14px;
+  border-bottom: 1.5px solid var(--border);
+  flex-shrink: 0;
+}
+.tab-item {
+  flex: 1;
+  text-align: center;
+  padding: 8px 0 9px;
+  font-size: 13px;
+  color: var(--ink4);
+  font-weight: 400;
+  position: relative;
+  cursor: pointer;
+}
+.tab-item.on {
+  color: var(--red);
+  font-weight: 600;
+}
+.tab-item.on::after {
+  content: '';
+  position: absolute;
+  bottom: -1.5px;
+  left: 15%; right: 15%;
+  height: 2px;
+  background: var(--red);
+  border-radius: 2px;
+}
+
+/* ── Section header ── */
+.sec-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding: 16px 18px 10px;
+}
+.sec-title {
+  font-family: var(--serif);
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--ink);
+  letter-spacing: 0.3px;
+}
+.sec-more { font-size: 11px; color: var(--red); cursor: pointer; }
+
+/* ─────────── INTRO PAGE ─────────── */
+.intro-featured {
+  position: relative;
+  height: 140px;
+  margin: 14px 18px 12px;
+  border-radius: var(--r-card);
+  overflow: hidden;
+  box-shadow: var(--shadow2);
+  background: linear-gradient(135deg, #d4a574 0%, #a8956a 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 60px;
+}
+.intro-featured::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 30% 20%, rgba(255,255,255,0.15), transparent);
+  pointer-events: none;
+}
+.featured-overlay {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  padding: 10px 12px;
+  background: linear-gradient(to top, rgba(0,0,0,0.35), transparent);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #fff;
+  z-index: 2;
+}
+.featured-play {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+.featured-title { font-size: 12px; font-weight: 600; flex-shrink: 0; }
+.featured-source { font-size: 8px; opacity: 0.8; margin-left: auto; flex-shrink: 0; }
+
+.intro-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  padding: 0 18px 12px;
+}
+.stat-item {
+  background: var(--card);
+  border-radius: var(--r-card);
+  padding: 10px 6px;
+  text-align: center;
+  border: 1px solid var(--border2);
+  box-shadow: var(--shadow);
+}
+.stat-big { font-size: 16px; font-weight: 700; color: var(--red); font-family: var(--serif); }
+.stat-small { font-size: 9px; color: var(--ink4); margin-top: 3px; }
+
+.intro-desc {
+  padding: 0 18px 12px;
+  font-size: 12px;
+  line-height: 1.8;
+  color: var(--ink2);
+}
+
+.intro-tags-title {
+  padding: 0 18px 8px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ink3);
+}
+.intro-tags {
+  padding: 0 18px 14px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.tag {
+  padding: 4px 10px;
+  border-radius: var(--r-pill);
+  border: 1px solid var(--border);
+  background: var(--card);
+  font-size: 10px;
+  color: var(--ink2);
+  box-shadow: var(--shadow);
+}
+.tag.highlight {
+  border-color: var(--red-bd);
+  background: var(--red-bg);
+  color: var(--red);
+  font-weight: 600;
+}
+
+.intro-weather {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  padding: 0 18px 20px;
+}
+.weather-box {
+  background: var(--card);
+  border-radius: var(--r-card);
+  padding: 10px 12px;
+  border: 1px solid var(--border2);
+  box-shadow: var(--shadow);
+}
+.weather-label { font-size: 9px; color: var(--ink4); margin-bottom: 5px; }
+.weather-value { font-size: 13px; font-weight: 600; color: var(--ink); }
+
+/* ─────────── AI BOTTOM SHEET ─────────── */
+.sheet-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(30, 24, 16, 0.4);
+  z-index: 100;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  border-radius: 38px;
+}
+.sheet-overlay.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.bottom-sheet {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: var(--card);
+  border-radius: 24px 24px 0 0;
+  z-index: 101;
+  height: 380px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--shadow2);
+  border: 1px solid var(--border);
+  border-bottom: none;
+  transform: translateY(100%);
+  transition: transform 0.35s cubic-bezier(0.32, 0.72, 0, 1);
+}
+.bottom-sheet.open {
+  transform: translateY(0);
+}
+
+.sheet-handle {
+  width: 36px;
+  height: 4px;
+  background: var(--border);
+  border-radius: 2px;
+  margin: 12px auto 0;
+  flex-shrink: 0;
+}
+
+.sheet-header {
+  padding: 10px 18px 10px;
+  border-bottom: 1px solid var(--border2);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+.sheet-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.ai-emoji { font-size: 20px; }
+.sheet-title-text { font-size: 14px; font-weight: 600; color: var(--ink); }
+.sheet-subtitle { font-size: 10px; color: var(--ink3); }
+.sheet-close {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--border2);
+  border-radius: 50%;
+  cursor: pointer;
+  color: var(--ink3);
+  font-size: 14px;
+  font-weight: 600;
+  transition: background 0.2s;
+}
+.sheet-close:hover { background: var(--border); }
+
+.sheet-content {
+  flex: 1;
+  overflow-y: auto;
+  scrollbar-width: none;
+  padding: 12px 18px;
+}
+.sheet-content::-webkit-scrollbar { display: none; }
+
+.chat-message {
+  margin-bottom: 12px;
+  display: flex;
+  gap: 8px;
+}
+.message-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+.ai-avatar { background: var(--gold-bg); border: 1px solid var(--gold-bd); }
+.user-avatar { background: var(--red-bg); border: 1px solid var(--red-bd); }
+
+.message-bubble {
+  padding: 10px 12px;
+  border-radius: 12px;
+  font-size: 11px;
+  line-height: 1.5;
+  max-width: 85%;
+}
+.ai-bubble {
+  background: var(--gold-bg);
+  border: 1px solid var(--gold-bd);
+  color: var(--ink);
+}
+.user-bubble {
+  background: var(--red-bg);
+  border: 1px solid var(--red-bd);
+  color: var(--ink);
+  margin-left: auto;
+}
+
+.quick-actions {
+  padding: 8px 18px;
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  border-top: 1px solid var(--border2);
+  flex-shrink: 0;
+}
+.action-btn {
+  padding: 5px 10px;
+  border-radius: 16px;
+  border: 1px solid var(--gold-bd);
+  background: var(--gold-bg);
+  color: var(--gold);
+  font-size: 10px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  font-family: var(--sans);
+}
+.action-btn:active {
+  background: var(--gold);
+  color: #fff;
+}
+
+.input-area {
+  padding: 8px 18px 14px;
+  display: flex;
+  gap: 8px;
+  border-top: 1px solid var(--border2);
+  flex-shrink: 0;
+}
+.input-field {
+  flex: 1;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  border-radius: 20px;
+  padding: 8px 14px;
+  font-size: 11px;
+  color: var(--ink);
+  font-family: var(--sans);
+  outline: none;
+  transition: all 0.2s ease;
+}
+.input-field::placeholder { color: var(--ink4); }
+.input-field:focus { border-color: var(--gold-bd); background: #fff; }
+
+.send-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--red);
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 600;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+}
+.send-btn:active { transform: scale(0.95); background: var(--red2); }
+
+/* ── Decorative grain overlay ── */
+.screen::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 200;
+  border-radius: 38px;
+}
+</style>
+</head>
+<body>
+<div class="stage">
+
+<!-- ═══════ PAGE 1: 太原 介绍 (with AI Sheet) ═══════ -->
+<div class="device-wrap">
+  <div class="device">
+    <div class="screen" id="screen">
+
+      <!-- Status Bar -->
+      <div class="status-bar">
+        <span class="status-time">21:54</span>
+        <div class="status-icons">
+          <i class="ti ti-wifi" style="font-size:13px"></i>
+          <i class="ti ti-battery" style="font-size:13px"></i>
+        </div>
+      </div>
+
+      <!-- City Header -->
+      <div class="city-header">
+        <!-- 可点击的 emoji + AI角标 -->
+        <div class="city-emoji-wrap" id="emojiBtn" title="点击咨询旅行助手">
+          <span class="city-emoji-icon">🏯</span>
+        </div>
+
+        <div class="city-province-pill"><span>山西省省会</span></div>
+        <div class="city-name">太原</div>
+        <div class="city-slogan">锦绣太原城 · 龙城文脉 · 汾河烟火</div>
+      </div>
+
+      <!-- Tabs -->
+      <div class="tabs">
+        <div class="tab-item on">介绍</div>
+        <div class="tab-item">景点</div>
+        <div class="tab-item">美食</div>
+        <div class="tab-item">路线</div>
+      </div>
+
+      <!-- Page Content -->
+      <div class="screen-scroll">
+        <div class="intro-featured">
+          🏰
+          <div class="featured-overlay">
+            <div class="featured-play">▶</div>
+            <div class="featured-title">锦绣太原</div>
+            <div class="featured-source">山西省文化旅游厅</div>
+          </div>
+        </div>
+
+        <div class="intro-stats">
+          <div class="stat-item">
+            <div class="stat-big">551万</div>
+            <div class="stat-small">城市人口</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-big">2500+</div>
+            <div class="stat-small">年历史</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-big">4A+</div>
+            <div class="stat-small">顶级景区</div>
+          </div>
+        </div>
+
+        <div class="intro-desc">
+          太原古称晋阳、并州，也被称作"龙城"。它坐落在汾河谷地，是山西的政治、经济、文化中心。这座城市有 2500 余年建城史，普洱、永祚等双塔，山西博物院和汾河两岸，把古都的厚重与今天的烟火气连在一起。
+        </div>
+
+        <div class="intro-tags-title">城市标签</div>
+        <div class="intro-tags">
+          <div class="tag highlight">国家历史文化名城</div>
+          <div class="tag">龙城</div>
+          <div class="tag">晋阳古都</div>
+          <div class="tag">汾河穿城</div>
+          <div class="tag">面食之乡</div>
+          <div class="tag">双塔地标</div>
+        </div>
+
+        <div class="intro-weather">
+          <div class="weather-box">
+            <div class="weather-label">最佳季节</div>
+            <div class="weather-value">5-6月·9-10月</div>
+          </div>
+          <div class="weather-box">
+            <div class="weather-label">年平均气温</div>
+            <div class="weather-value">约 9.5°C</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── AI Bottom Sheet ── -->
+      <div class="sheet-overlay" id="overlay"></div>
+
+      <div class="bottom-sheet" id="bottomSheet">
+        <div class="sheet-handle"></div>
+
+        <div class="sheet-header">
+          <div class="sheet-title">
+            <div class="ai-emoji">🤖</div>
+            <div>
+              <div class="sheet-title-text">旅行助手</div>
+              <div class="sheet-subtitle">了解太原城市信息</div>
+            </div>
+          </div>
+          <div class="sheet-close" id="closeBtn">×</div>
+        </div>
+
+        <div class="sheet-content" id="chatContent">
+          <div class="chat-message">
+            <div class="message-avatar ai-avatar">🤖</div>
+            <div class="message-bubble ai-bubble">
+              你好！👋 我是太原旅行助手，很高兴认识你。我可以帮你了解太原的美食、景点、历史文化和旅行路线。你想了解些什么呢？
+            </div>
+          </div>
+          <div class="chat-message" style="margin-top: 16px;">
+            <div class="message-avatar user-avatar">👤</div>
+            <div class="message-bubble user-bubble">
+              太原有什么特色美食？
+            </div>
+          </div>
+          <div class="chat-message">
+            <div class="message-avatar ai-avatar">🤖</div>
+            <div class="message-bubble ai-bubble">
+              太原作为面食之乡，最有名的是刀削面。除此之外还有过油肉（晋菜经典）、头脑（太原独有的药膳）、羊杂割等。你想深入了解哪一种美食呢？
+            </div>
+          </div>
+        </div>
+
+        <div class="quick-actions">
+          <button class="action-btn">🍜 美食推荐</button>
+          <button class="action-btn">🏛️ 景点介绍</button>
+          <button class="action-btn">📚 城市历史</button>
+          <button class="action-btn">🗺️ 旅行路线</button>
+        </div>
+
+        <div class="input-area">
+          <input type="text" class="input-field" id="chatInput" placeholder="输入你的问题...">
+          <button class="send-btn">→</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <div class="page-label">① 太原·介绍<span>点击右上角🏯图标 → AI助手弹出</span></div>
+</div>
+
+</div>
+
+<script>
+const emojiBtn   = document.getElementById('emojiBtn');
+const overlay    = document.getElementById('overlay');
+const bottomSheet = document.getElementById('bottomSheet');
+const closeBtn   = document.getElementById('closeBtn');
+
+function openSheet() {
+  overlay.classList.add('visible');
+  bottomSheet.classList.add('open');
+}
+
+function closeSheet() {
+  overlay.classList.remove('visible');
+  bottomSheet.classList.remove('open');
+}
+
+emojiBtn.addEventListener('click', openSheet);
+overlay.addEventListener('click', closeSheet);
+closeBtn.addEventListener('click', closeSheet);
+
+// Quick action buttons
+document.querySelectorAll('.action-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const chatContent = document.getElementById('chatContent');
+    const text = btn.textContent.trim();
+    // Append user message
+    const userMsg = document.createElement('div');
+    userMsg.className = 'chat-message';
+    userMsg.innerHTML = `
+      <div class="message-avatar user-avatar">👤</div>
+      <div class="message-bubble user-bubble">${text}</div>`;
+    chatContent.appendChild(userMsg);
+    chatContent.scrollTop = chatContent.scrollHeight;
+  });
+});
+</script>
+</body>
+</html>

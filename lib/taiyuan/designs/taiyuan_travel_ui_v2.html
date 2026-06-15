@@ -1,0 +1,1051 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<style>
+:root {
+  /* ── 晋商色系：汾河砖红 × 黄土米白 × 古建深墨 ── */
+  --bg:        #F2EDE4;   /* 米白·宣纸底 */
+  --bg2:       #EAE2D6;   /* 浅砖米 */
+  --bg3:       #DDD3C2;   /* 深米 */
+  --ink:       #1E1810;   /* 古建深墨 */
+  --ink2:      #3D3528;   /* 次级墨 */
+  --ink3:      #7A6E60;   /* 辅助文字 */
+  --ink4:      #A89E90;   /* 极弱文字 */
+  --red:       #B84C2E;   /* 晋砖红·主强调 */
+  --red2:      #D4613C;   /* 亮砖红 */
+  --gold:      #9B7A3A;   /* 晋商铜金 */
+  --gold2:     #C4A04E;   /* 亮金 */
+  --gold-bg:   rgba(155,122,58,0.10);
+  --gold-bd:   rgba(155,122,58,0.28);
+  --red-bg:    rgba(184,76,46,0.10);
+  --red-bd:    rgba(184,76,46,0.25);
+  --card:      #FFFFFF;
+  --card2:     #F8F3EC;
+  --border:    rgba(30,24,16,0.10);
+  --border2:   rgba(30,24,16,0.06);
+  --shadow:    0 2px 12px rgba(30,24,16,0.08);
+  --shadow2:   0 4px 20px rgba(30,24,16,0.12);
+  --serif:     'Noto Serif SC', serif;
+  --sans:      'Noto Sans SC', sans-serif;
+  --r-card:    14px;
+  --r-pill:    100px;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: #E8E0D4; font-family: var(--sans); }
+
+/* ── Stage ── */
+.stage {
+  display: flex;
+  gap: 24px;
+  padding: 20px 16px 28px;
+  overflow-x: auto;
+  align-items: flex-start;
+}
+
+/* ── Device shell ── */
+.device-wrap { display: flex; flex-direction: column; align-items: center; gap: 10px; flex-shrink: 0; }
+.device {
+  width: 260px;
+  background: #1a1510;
+  border-radius: 48px;
+  padding: 10px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.35), 0 0 0 1px rgba(255,255,255,0.08);
+  position: relative;
+}
+.device::before {
+  content: '';
+  position: absolute;
+  top: 10px; left: 50%; transform: translateX(-50%);
+  width: 80px; height: 24px;
+  background: #1a1510;
+  border-radius: 0 0 18px 18px;
+  z-index: 20;
+  border: 1px solid rgba(255,255,255,0.06);
+  border-top: none;
+}
+.screen {
+  background: var(--bg);
+  border-radius: 38px;
+  overflow: hidden;
+  height: 560px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+.screen-scroll {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: none;
+}
+.screen-scroll::-webkit-scrollbar { display: none; }
+
+.page-label {
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ink2);
+  text-align: center;
+}
+.page-label span {
+  display: block;
+  font-size: 10px;
+  color: var(--ink4);
+  margin-top: 2px;
+  font-weight: 400;
+}
+
+/* ── Status bar ── */
+.status-bar {
+  height: 32px;
+  padding: 8px 20px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-shrink: 0;
+}
+.status-time { font-size: 11px; font-weight: 600; color: var(--ink); }
+.status-icons { display: flex; gap: 4px; align-items: center; color: var(--ink); font-size: 11px; }
+
+/* ── City Header ── */
+.city-header {
+  padding: 12px 18px 0;
+  flex-shrink: 0;
+  position: relative;
+}
+.city-province-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--gold-bg);
+  border: 1px solid var(--gold-bd);
+  border-radius: var(--r-pill);
+  padding: 3px 10px;
+  margin-bottom: 6px;
+}
+.city-province-pill span { font-size: 10px; font-weight: 500; color: var(--gold); }
+.city-name {
+  font-family: var(--serif);
+  font-size: 34px;
+  font-weight: 700;
+  color: var(--ink);
+  letter-spacing: 3px;
+  line-height: 1.1;
+}
+.city-slogan {
+  font-size: 11px;
+  color: var(--ink3);
+  margin-top: 4px;
+  letter-spacing: 0.5px;
+}
+.city-emoji {
+  position: absolute;
+  right: 16px;
+  top: 16px;
+  font-size: 52px;
+  filter: drop-shadow(0 4px 8px rgba(0,0,0,0.15));
+}
+
+/* ── Tabs ── */
+.tabs {
+  display: flex;
+  padding: 0 18px;
+  margin-top: 14px;
+  border-bottom: 1.5px solid var(--border);
+  flex-shrink: 0;
+}
+.tab-item {
+  flex: 1;
+  text-align: center;
+  padding: 8px 0 9px;
+  font-size: 13px;
+  color: var(--ink4);
+  font-weight: 400;
+  position: relative;
+  cursor: pointer;
+}
+.tab-item.on {
+  color: var(--red);
+  font-weight: 600;
+}
+.tab-item.on::after {
+  content: '';
+  position: absolute;
+  bottom: -1.5px;
+  left: 15%; right: 15%;
+  height: 2px;
+  background: var(--red);
+  border-radius: 2px;
+}
+
+/* ── Section header ── */
+.sec-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding: 16px 18px 10px;
+}
+.sec-title {
+  font-family: var(--serif);
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--ink);
+  letter-spacing: 0.3px;
+}
+.sec-more { font-size: 11px; color: var(--red); }
+
+/* ─────────── INTRO PAGE ─────────── */
+.intro-featured {
+  position: relative;
+  height: 140px;
+  margin: 14px 18px 12px;
+  border-radius: var(--r-card);
+  overflow: hidden;
+  box-shadow: var(--shadow2);
+  background: linear-gradient(135deg, #d4a574 0%, #a8956a 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 60px;
+}
+.intro-featured::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 30% 20%, rgba(255,255,255,0.15), transparent);
+  pointer-events: none;
+}
+.featured-overlay {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  padding: 10px 12px;
+  background: linear-gradient(to top, rgba(0,0,0,0.35), transparent);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #fff;
+  z-index: 2;
+}
+.featured-play {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+.featured-title {
+  font-size: 12px;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+.featured-source {
+  font-size: 8px;
+  opacity: 0.8;
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+.intro-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 8px;
+  padding: 0 18px 14px;
+}
+.stat-item {
+  background: var(--card);
+  border-radius: var(--r-card);
+  padding: 10px 8px;
+  text-align: center;
+  border: 1px solid var(--border2);
+  box-shadow: var(--shadow);
+}
+.stat-big {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--red);
+  font-family: var(--serif);
+  line-height: 1.2;
+}
+.stat-small {
+  font-size: 9px;
+  color: var(--ink4);
+  margin-top: 2px;
+}
+
+.intro-desc {
+  margin: 0 18px 14px;
+  background: var(--card);
+  border-radius: var(--r-card);
+  padding: 12px 14px;
+  font-size: 11px;
+  line-height: 1.6;
+  color: var(--ink3);
+  border: 1px solid var(--border2);
+  box-shadow: var(--shadow);
+}
+
+.intro-tags-title {
+  padding: 0 18px 8px;
+  font-family: var(--serif);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink);
+}
+.intro-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 0 18px 14px;
+}
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 12px;
+  border-radius: var(--r-pill);
+  border: 1px solid var(--border);
+  background: var(--card);
+  font-size: 10px;
+  color: var(--ink3);
+  box-shadow: var(--shadow);
+}
+.tag.highlight {
+  background: var(--gold-bg);
+  border-color: var(--gold-bd);
+  color: var(--gold);
+  font-weight: 500;
+}
+
+.intro-weather {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  padding: 0 18px 16px;
+}
+.weather-box {
+  background: var(--card);
+  border-radius: var(--r-card);
+  padding: 12px 10px;
+  border: 1px solid var(--border2);
+  box-shadow: var(--shadow);
+}
+.weather-label {
+  font-size: 9px;
+  color: var(--ink4);
+  margin-bottom: 3px;
+}
+.weather-value {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+/* ─────────── SPOTS PAGE ─────────── */
+.spots-scroll {
+  display: flex;
+  gap: 10px;
+  padding: 0 18px 12px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.spots-scroll::-webkit-scrollbar { display: none; }
+
+.spot-card {
+  width: 130px;
+  flex-shrink: 0;
+  background: var(--card);
+  border-radius: var(--r-card);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border2);
+}
+.spot-img {
+  height: 88px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 38px;
+  position: relative;
+}
+.spot-grade {
+  position: absolute;
+  top: 7px; right: 7px;
+  background: var(--gold);
+  color: #fff;
+  font-size: 9px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 6px;
+  letter-spacing: 0.5px;
+}
+.spot-body { padding: 8px 10px 10px; }
+.spot-name { font-size: 12px; font-weight: 600; color: var(--ink); }
+.spot-meta { display: flex; gap: 6px; align-items: center; margin-top: 4px; }
+.spot-price { font-size: 10px; font-weight: 600; color: var(--red); }
+.spot-tag { font-size: 9px; color: var(--ink4); }
+
+/* List items */
+.list-card {
+  margin: 0 18px 8px;
+  background: var(--card);
+  border-radius: var(--r-card);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border2);
+}
+.list-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 14px;
+  border-bottom: 1px solid var(--border2);
+}
+.list-row:last-child { border-bottom: none; }
+.list-icon {
+  width: 40px; height: 40px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  flex-shrink: 0;
+}
+.list-info { flex: 1; }
+.list-name { font-size: 13px; font-weight: 600; color: var(--ink); }
+.list-desc { font-size: 10px; color: var(--ink3); margin-top: 2px; }
+.list-right { text-align: right; flex-shrink: 0; }
+.list-stars { font-size: 11px; color: var(--gold); font-weight: 500; }
+.list-sub { font-size: 10px; color: var(--ink4); margin-top: 2px; }
+
+/* ─────────── FOOD PAGE ─────────── */
+.food-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  padding: 0 18px 12px;
+}
+.food-card {
+  background: var(--card);
+  border-radius: var(--r-card);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border2);
+}
+.food-img {
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 34px;
+  position: relative;
+}
+.food-img::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 24px;
+  background: linear-gradient(to top, var(--card), transparent);
+}
+.food-body { padding: 8px 10px 10px; }
+.food-name { font-size: 12px; font-weight: 600; color: var(--ink); }
+.food-desc { font-size: 9px; color: var(--ink3); margin-top: 2px; }
+.heat-row { display: flex; gap: 3px; margin-top: 6px; }
+.heat-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--border);
+}
+.heat-dot.on { background: var(--red2); }
+
+/* ─────────── ROUTE PAGE ─────────── */
+.route-chips {
+  display: flex;
+  gap: 8px;
+  padding: 12px 18px 14px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.route-chips::-webkit-scrollbar { display: none; }
+.chip {
+  flex-shrink: 0;
+  padding: 6px 14px;
+  border-radius: var(--r-pill);
+  font-size: 11px;
+  font-weight: 500;
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: var(--ink2);
+  white-space: nowrap;
+}
+.chip.on {
+  background: var(--red);
+  color: #fff;
+  border-color: var(--red);
+}
+
+.route-header {
+  padding: 0 18px 10px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+.route-title-block {}
+.route-title { font-family: var(--serif); font-size: 16px; font-weight: 600; color: var(--ink); }
+.route-sub { font-size: 10px; color: var(--ink3); margin-top: 3px; }
+.badge-rec {
+  padding: 4px 10px;
+  border-radius: var(--r-pill);
+  background: var(--gold-bg);
+  border: 1px solid var(--gold-bd);
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--gold);
+  flex-shrink: 0;
+}
+
+.route-step {
+  display: flex;
+  gap: 12px;
+  padding: 0 18px 0 20px;
+  margin-bottom: 4px;
+}
+.step-spine {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-shrink: 0;
+  padding-top: 2px;
+}
+.step-dot {
+  width: 24px; height: 24px;
+  border-radius: 50%;
+  background: var(--red);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(184,76,46,0.35);
+  flex-shrink: 0;
+}
+.step-line {
+  width: 2px;
+  flex: 1;
+  min-height: 20px;
+  background: repeating-linear-gradient(
+    to bottom,
+    var(--red2) 0px, var(--red2) 4px,
+    transparent 4px, transparent 8px
+  );
+  margin: 4px 0;
+  border-radius: 2px;
+}
+.step-body {
+  background: var(--card);
+  border-radius: var(--r-card);
+  padding: 10px 12px;
+  flex: 1;
+  margin-bottom: 8px;
+  border: 1px solid var(--border2);
+  box-shadow: var(--shadow);
+}
+.step-name { font-size: 13px; font-weight: 600; color: var(--ink); }
+.step-desc { font-size: 10px; color: var(--ink3); margin-top: 3px; line-height: 1.5; }
+.step-time {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 6px;
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--red);
+}
+
+.copy-btn {
+  margin: 4px 18px 10px;
+  background: var(--red);
+  color: #fff;
+  border-radius: var(--r-card);
+  padding: 13px;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  box-shadow: 0 4px 16px rgba(184,76,46,0.30);
+}
+
+.route-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 8px;
+  padding: 0 18px 16px;
+}
+.stat-box {
+  background: var(--card);
+  border-radius: var(--r-card);
+  padding: 10px 8px;
+  text-align: center;
+  border: 1px solid var(--border2);
+  box-shadow: var(--shadow);
+}
+.stat-num { font-size: 18px; font-weight: 700; color: var(--red); font-family: var(--serif); }
+.stat-lbl { font-size: 9px; color: var(--ink4); margin-top: 3px; }
+
+/* ── Decorative grain overlay ── */
+.screen::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 50;
+  border-radius: 38px;
+}
+</style>
+</head>
+<body>
+<div class="stage">
+
+<!-- ═══════ PAGE 0: 介绍 ═══════ -->
+<div class="device-wrap">
+  <div class="device">
+    <div class="screen">
+      <div class="status-bar">
+        <span class="status-time">21:54</span>
+        <div class="status-icons">
+          <i class="ti ti-wifi" style="font-size:13px"></i>
+          <i class="ti ti-battery" style="font-size:13px"></i>
+        </div>
+      </div>
+
+      <div class="city-header">
+        <div class="city-emoji">🏯</div>
+        <div class="city-province-pill"><span>山西省省会</span></div>
+        <div class="city-name">太原</div>
+        <div class="city-slogan">锦绣太原城 · 龙城文脉 · 汾河烟火</div>
+      </div>
+
+      <div class="tabs">
+        <div class="tab-item on">介绍</div>
+        <div class="tab-item">景点</div>
+        <div class="tab-item">美食</div>
+        <div class="tab-item">路线</div>
+      </div>
+
+      <div class="screen-scroll">
+        <div class="intro-featured">
+          🏰
+          <div class="featured-overlay">
+            <div class="featured-play">▶</div>
+            <div class="featured-title">锦绣太原</div>
+            <div class="featured-source">山西省文化旅游厅</div>
+          </div>
+        </div>
+
+        <div class="intro-stats">
+          <div class="stat-item">
+            <div class="stat-big">551万</div>
+            <div class="stat-small">城市人口</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-big">2500+</div>
+            <div class="stat-small">年历史</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-big">4A+</div>
+            <div class="stat-small">顶级景区</div>
+          </div>
+        </div>
+
+        <div class="intro-desc">
+太原古称晋阳、并州，也被称作"龙城"。它坐落在汾河谷地，是山西的政治、经济、文化中心。这座城市有 2500 余年建城史，普洱、永祚等双塔，山西博物院和汾河两岸，把古都的厚重与今天的烟火气连在一起。
+        </div>
+
+        <div class="intro-tags-title">城市标签</div>
+        <div class="intro-tags">
+          <div class="tag highlight">国家历史文化名城</div>
+          <div class="tag">龙城</div>
+          <div class="tag">晋阳古都</div>
+          <div class="tag">汾河穿城</div>
+          <div class="tag">面食之乡</div>
+          <div class="tag">双塔地标</div>
+        </div>
+
+        <div class="intro-weather">
+          <div class="weather-box">
+            <div class="weather-label">最佳季节</div>
+            <div class="weather-value">5-6月·9-10月</div>
+          </div>
+          <div class="weather-box">
+            <div class="weather-label">年平均气温</div>
+            <div class="weather-value">约 9.5°C</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="page-label">⓪ 城市介绍<span>概览 · 统计 · 标签 · 气候</span></div>
+</div>
+
+<!-- ═══════ PAGE 1: 景点 ═══════ -->
+<div class="device-wrap">
+  <div class="device">
+    <div class="screen">
+      <div class="status-bar">
+        <span class="status-time">21:54</span>
+        <div class="status-icons">
+          <i class="ti ti-wifi" style="font-size:13px"></i>
+          <i class="ti ti-battery" style="font-size:13px"></i>
+        </div>
+      </div>
+
+      <div class="city-header">
+        <div class="city-emoji">🌲</div>
+        <div class="city-province-pill"><span>山西省省会</span></div>
+        <div class="city-name">太原</div>
+        <div class="city-slogan">锦绣太原城 · 龙城文脉 · 汾河烟火</div>
+      </div>
+
+      <div class="tabs">
+        <div class="tab-item">介绍</div>
+        <div class="tab-item on">景点</div>
+        <div class="tab-item">美食</div>
+        <div class="tab-item">路线</div>
+      </div>
+
+      <div class="screen-scroll">
+        <div class="sec-head">
+          <span class="sec-title">代表景点</span>
+          <span class="sec-more">地图 →</span>
+        </div>
+
+        <div class="spots-scroll">
+          <div class="spot-card">
+            <div class="spot-img" style="background:linear-gradient(135deg,#f0e8d8,#ddd0b8)">
+              🏯<span class="spot-grade">5A</span>
+            </div>
+            <div class="spot-body">
+              <div class="spot-name">晋祠</div>
+              <div class="spot-meta">
+                <span class="spot-price">¥80</span>
+                <span class="spot-tag">千年古建</span>
+              </div>
+            </div>
+          </div>
+          <div class="spot-card">
+            <div class="spot-img" style="background:linear-gradient(135deg,#e8eef5,#ccd8e8)">
+              🏛️<span class="spot-grade">4A</span>
+            </div>
+            <div class="spot-body">
+              <div class="spot-name">山西博物院</div>
+              <div class="spot-meta">
+                <span class="spot-price">免费</span>
+                <span class="spot-tag">镇院之宝</span>
+              </div>
+            </div>
+          </div>
+          <div class="spot-card">
+            <div class="spot-img" style="background:linear-gradient(135deg,#f8e8e0,#e8c8b8)">
+              🗼<span class="spot-grade">4A</span>
+            </div>
+            <div class="spot-body">
+              <div class="spot-name">永祚寺双塔</div>
+              <div class="spot-meta">
+                <span class="spot-price">¥35</span>
+                <span class="spot-tag">地标建筑</span>
+              </div>
+            </div>
+          </div>
+          <div class="spot-card">
+            <div class="spot-img" style="background:linear-gradient(135deg,#e0f0d8,#c0d8a8)">
+              🌳<span class="spot-grade">4A</span>
+            </div>
+            <div class="spot-body">
+              <div class="spot-name">晋阳湖公园</div>
+              <div class="spot-meta">
+                <span class="spot-price">免费</span>
+                <span class="spot-tag">新地标</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="sec-head" style="padding-top:8px">
+          <span class="sec-title">城市景观</span>
+        </div>
+
+        <div class="list-card">
+          <div class="list-row">
+            <div class="list-icon" style="background:#f0e8d8">🏰</div>
+            <div class="list-info">
+              <div class="list-name">悬翠寺</div>
+              <div class="list-desc">太原古刹 · 千年佛寺</div>
+            </div>
+            <div class="list-right">
+              <div class="list-stars">★ 4.3</div>
+              <div class="list-sub">¥25</div>
+            </div>
+          </div>
+          <div class="list-row">
+            <div class="list-icon" style="background:#e8f0f0">🌊</div>
+            <div class="list-info">
+              <div class="list-name">汾河公园</div>
+              <div class="list-desc">城市绿道 · 夜景游船</div>
+            </div>
+            <div class="list-right">
+              <div class="list-stars">★ 4.5</div>
+              <div class="list-sub">免费</div>
+            </div>
+          </div>
+          <div class="list-row">
+            <div class="list-icon" style="background:#f5ece8">🛍️</div>
+            <div class="list-info">
+              <div class="list-name">柳巷 · 钟楼街</div>
+              <div class="list-desc">百年商圈 · 老字号云集</div>
+            </div>
+            <div class="list-right">
+              <div class="list-stars">★ 4.7</div>
+              <div class="list-sub">步行街</div>
+            </div>
+          </div>
+          <div class="list-row">
+            <div class="list-icon" style="background:#eef0f8">🏊</div>
+            <div class="list-info">
+              <div class="list-name">晋阳湖公园</div>
+              <div class="list-desc">城市新地标 · 水上乐园</div>
+            </div>
+            <div class="list-right">
+              <div class="list-stars">★ 4.4</div>
+              <div class="list-sub">免费</div>
+            </div>
+          </div>
+        </div>
+        <div style="height:8px"></div>
+      </div>
+    </div>
+  </div>
+  <div class="page-label">① 旅游景点<span>卡片 + 评分列表</span></div>
+</div>
+
+<!-- ═══════ PAGE 2: 美食 ═══════ -->
+<div class="device-wrap">
+  <div class="device">
+    <div class="screen">
+      <div class="status-bar">
+        <span class="status-time">21:55</span>
+        <div class="status-icons">
+          <i class="ti ti-wifi" style="font-size:13px"></i>
+          <i class="ti ti-battery" style="font-size:13px"></i>
+        </div>
+      </div>
+
+      <div class="city-header">
+        <div class="city-emoji">🍜</div>
+        <div class="city-province-pill"><span>山西省省会</span></div>
+        <div class="city-name">太原</div>
+        <div class="city-slogan">锦绣太原城 · 龙城文脉 · 汾河烟火</div>
+      </div>
+
+      <div class="tabs">
+        <div class="tab-item">介绍</div>
+        <div class="tab-item">景点</div>
+        <div class="tab-item on">美食</div>
+        <div class="tab-item">路线</div>
+      </div>
+
+      <div class="screen-scroll">
+        <div class="sec-head">
+          <span class="sec-title">代表美食</span>
+        </div>
+
+        <div class="food-grid">
+          <div class="food-card">
+            <div class="food-img" style="background:linear-gradient(160deg,#f5e8d0,#e8d0a8)">🍜</div>
+            <div class="food-body">
+              <div class="food-name">刀削面</div>
+              <div class="food-desc">山西面食名片</div>
+              <div class="heat-row">
+                <div class="heat-dot on"></div><div class="heat-dot on"></div>
+                <div class="heat-dot on"></div><div class="heat-dot"></div><div class="heat-dot"></div>
+              </div>
+            </div>
+          </div>
+          <div class="food-card">
+            <div class="food-img" style="background:linear-gradient(160deg,#f5d8d0,#e8b8a8)">🥩</div>
+            <div class="food-body">
+              <div class="food-name">过油肉</div>
+              <div class="food-desc">晋菜经典头牌</div>
+              <div class="heat-row">
+                <div class="heat-dot on"></div><div class="heat-dot on"></div>
+                <div class="heat-dot on"></div><div class="heat-dot on"></div><div class="heat-dot"></div>
+              </div>
+            </div>
+          </div>
+          <div class="food-card">
+            <div class="food-img" style="background:linear-gradient(160deg,#f0eee0,#e0d8c0)">🍲</div>
+            <div class="food-body">
+              <div class="food-name">头脑</div>
+              <div class="food-desc">太原独有药膳</div>
+              <div class="heat-row">
+                <div class="heat-dot on"></div><div class="heat-dot on"></div>
+                <div class="heat-dot"></div><div class="heat-dot"></div><div class="heat-dot"></div>
+              </div>
+            </div>
+          </div>
+          <div class="food-card">
+            <div class="food-img" style="background:linear-gradient(160deg,#eef0e8,#d8e0c8)">🐑</div>
+            <div class="food-body">
+              <div class="food-name">羊杂割</div>
+              <div class="food-desc">冬日暖身必备</div>
+              <div class="heat-row">
+                <div class="heat-dot on"></div><div class="heat-dot on"></div>
+                <div class="heat-dot on"></div><div class="heat-dot"></div><div class="heat-dot"></div>
+              </div>
+            </div>
+          </div>
+          <div class="food-card">
+            <div class="food-img" style="background:linear-gradient(160deg,#f0e8f0,#dcc8d8)">🥢</div>
+            <div class="food-body">
+              <div class="food-name">剔尖</div>
+              <div class="food-desc">筷子拔出的花样</div>
+              <div class="heat-row">
+                <div class="heat-dot on"></div><div class="heat-dot on"></div>
+                <div class="heat-dot on"></div><div class="heat-dot"></div><div class="heat-dot"></div>
+              </div>
+            </div>
+          </div>
+          <div class="food-card">
+            <div class="food-img" style="background:linear-gradient(160deg,#f5f0e0,#e8e0c0)">🫓</div>
+            <div class="food-body">
+              <div class="food-name">莜面栲栳栳</div>
+              <div class="food-desc">晋北粗粮经典</div>
+              <div class="heat-row">
+                <div class="heat-dot on"></div><div class="heat-dot"></div>
+                <div class="heat-dot"></div><div class="heat-dot"></div><div class="heat-dot"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div style="height:8px"></div>
+      </div>
+    </div>
+  </div>
+  <div class="page-label">② 代表美食<span>彩色分类卡 + 辣度</span></div>
+</div>
+
+<!-- ═══════ PAGE 3: 路线 ═══════ -->
+<div class="device-wrap">
+  <div class="device">
+    <div class="screen">
+      <div class="status-bar">
+        <span class="status-time">21:55</span>
+        <div class="status-icons">
+          <i class="ti ti-wifi" style="font-size:13px"></i>
+          <i class="ti ti-battery" style="font-size:13px"></i>
+        </div>
+      </div>
+
+      <div class="city-header">
+        <div class="city-emoji">🗺️</div>
+        <div class="city-province-pill"><span>山西省省会</span></div>
+        <div class="city-name">太原</div>
+        <div class="city-slogan">锦绣太原城 · 龙城文脉 · 汾河烟火</div>
+      </div>
+
+      <div class="tabs">
+        <div class="tab-item">介绍</div>
+        <div class="tab-item">景点</div>
+        <div class="tab-item">美食</div>
+        <div class="tab-item on">路线</div>
+      </div>
+
+      <div class="screen-scroll">
+        <div class="route-chips">
+          <div class="chip on">龙城印象</div>
+          <div class="chip">古建寻踪</div>
+          <div class="chip">太原味道</div>
+          <div class="chip">亲子探索</div>
+          <div class="chip">山水之旅</div>
+        </div>
+
+        <div class="route-header">
+          <div class="route-title-block">
+            <div class="route-title">龙城印象</div>
+            <div class="route-sub">1天 · 3处打卡 · 城市经典</div>
+          </div>
+          <div class="badge-rec">推荐</div>
+        </div>
+
+        <div class="route-step">
+          <div class="step-spine">
+            <div class="step-dot">1</div>
+            <div class="step-line"></div>
+          </div>
+          <div class="step-body">
+            <div class="step-name">山西博物院</div>
+            <div class="step-desc">从史前到明清，两小时穿越三晋五千年</div>
+            <div class="step-time"><i class="ti ti-clock" style="font-size:11px"></i>09:00</div>
+          </div>
+        </div>
+
+        <div class="route-step">
+          <div class="step-spine">
+            <div class="step-dot">2</div>
+            <div class="step-line"></div>
+          </div>
+          <div class="step-body">
+            <div class="step-name">永祚寺双塔</div>
+            <div class="step-desc">登塔俯瞰太原城，赏明代牡丹园</div>
+            <div class="step-time"><i class="ti ti-clock" style="font-size:11px"></i>13:00</div>
+          </div>
+        </div>
+
+        <div class="route-step" style="margin-bottom:0">
+          <div class="step-spine">
+            <div class="step-dot">3</div>
+          </div>
+          <div class="step-body">
+            <div class="step-name">汾河公园 · 日落</div>
+            <div class="step-desc">汾河晚风，夕阳映双塔，太原最美时刻</div>
+            <div class="step-time"><i class="ti ti-clock" style="font-size:11px"></i>17:00</div>
+          </div>
+        </div>
+
+        <div style="height:12px"></div>
+        <div class="copy-btn">📋 复制路线</div>
+
+        <div class="route-stats">
+          <div class="stat-box">
+            <div class="stat-num">1</div>
+            <div class="stat-lbl">天</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-num">3</div>
+            <div class="stat-lbl">打卡点</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-num">¥150</div>
+            <div class="stat-lbl">预算/人</div>
+          </div>
+        </div>
+        <div style="height:8px"></div>
+      </div>
+    </div>
+  </div>
+  <div class="page-label">③ 旅行路线<span>Chip切换 + 时间线</span></div>
+</div>
+
+</div>
+</body>
+</html>
